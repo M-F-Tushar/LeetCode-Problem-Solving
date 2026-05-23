@@ -4,10 +4,11 @@
 
 Given an integer array `nums` and an integer `target`, return the indices of the two numbers such that they add up to `target`.
 
-### Constraints
+### Rules
 
 - Each input has exactly one solution.
 - You cannot use the same element twice.
+- Return the indices, not the values.
 - The answer can be returned in any order.
 
 ---
@@ -36,7 +37,7 @@ The problem asks for:
 x + y = target
 ```
 
-Instead of searching for both numbers blindly, fix one number and calculate what the other number must be:
+Instead of searching for both `x` and `y`, fix one number and calculate the missing number:
 
 ```text
 complement = target - current_number
@@ -45,79 +46,91 @@ complement = target - current_number
 So the real question becomes:
 
 ```text
-Have I seen this complement before?
+Have I already seen the complement?
 ```
 
 ---
 
-# Strategic Problem-Solving Flow
+# Problem-Solving Evolution
+
+```mermaid
+timeline
+    title Evolution of Thinking for Two Sum
+
+    Brute Force
+        : Try every possible pair
+        : Easy to understand
+        : Too slow for large input
+
+    Two Pointers
+        : Sort the numbers
+        : Shrink search space
+        : Must preserve original indices
+
+    Hash Map
+        : Store previously seen values
+        : Search by complement
+        : One pass optimal solution
+```
+
+---
+
+# Strategic Decision Flow
 
 ```mermaid
 flowchart TD
-    A["Understand the Problem<br/><b>Find two indices</b>"] --> B["Build Baseline<br/><b>Brute Force</b>"]
-    B --> C{"Where is the Bottleneck?"}
-    C --> D["Repeatedly searching<br/>for the second number"]
-    D --> E["Reframe the Problem<br/><b>Find complement</b>"]
-    E --> F{"Need fast lookup?"}
-    F -->|Yes| G["Use Hash Map<br/><b>O(1) average lookup</b>"]
-    G --> H["One Pass Solution<br/><b>O(n) Time</b>"]
+    A["🧩 Problem<br/>Find two indices whose values sum to target"] --> B["🪓 Baseline<br/>Try every pair"]
 
-    classDef start fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a;
-    classDef problem fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a;
-    classDef bottleneck fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
+    B --> C{"⚠️ Bottleneck?"}
+    C --> D["Nested search<br/>Each number scans many others"]
+
+    D --> E["🔁 Reframe<br/>Instead of finding two numbers,<br/>find the missing complement"]
+
+    E --> F{"What data structure gives<br/>fast existence checks?"}
+
+    F --> G["📦 Hash Map<br/>value → index"]
+
+    G --> H["🚀 One-pass scan<br/>Check complement before insert"]
+
+    H --> I["✅ Optimal Result<br/>Time: O(n)<br/>Space: O(n)"]
+
+    classDef problem fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
+    classDef danger fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
+    classDef insight fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
     classDef optimize fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a;
-    classDef final fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#0f172a;
+    classDef final fill:#ede9fe,stroke:#7c3aed,stroke-width:3px,color:#0f172a;
 
-    class A start;
-    class B,C problem;
-    class D bottleneck;
-    class E,F,G optimize;
-    class H final;
+    class A,B problem;
+    class C,D danger;
+    class E,F insight;
+    class G,H optimize;
+    class I final;
 ```
 
 ---
 
-# Approach Overview
+# Approach Comparison
 
 ```mermaid
-flowchart LR
-    subgraph A["Approach 1"]
-        A1["Brute Force"]
-        A2["Check every pair"]
-        A3["Time: O(n²)"]
-    end
+quadrantChart
+    title Two Sum Approach Trade-Off
+    x-axis Low Space --> High Space
+    y-axis Slow Runtime --> Fast Runtime
 
-    subgraph B["Approach 2"]
-        B1["Two Pointers"]
-        B2["Sort first"]
-        B3["Time: O(n log n)"]
-    end
+    quadrant-1 Fast but More Memory
+    quadrant-2 Best Balance
+    quadrant-3 Worst Zone
+    quadrant-4 Memory Efficient but Slow
 
-    subgraph C["Approach 3"]
-        C1["Hash Map"]
-        C2["Complement lookup"]
-        C3["Time: O(n)"]
-    end
-
-    A --> B --> C
-
-    classDef slow fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#111827;
-    classDef medium fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#111827;
-    classDef fast fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#111827;
-
-    class A,A1,A2,A3 slow;
-    class B,B1,B2,B3 medium;
-    class C,C1,C2,C3 fast;
+    Brute Force: [0.15, 0.20]
+    Two Pointers: [0.55, 0.60]
+    Hash Map: [0.75, 0.90]
 ```
-
----
-
-# Comparison Table
 
 | Approach | Core Idea | Time | Space | Verdict |
 |---|---|---:|---:|---|
-| Brute Force | Check every pair | `O(n²)` | `O(1)` | Too slow |
-| Two Pointers | Sort and shrink search space | `O(n log n)` | `O(n)` | Better, but not optimal |
+| Brute Force | Check every pair | `O(n²)` | `O(1)` | Simple but slow |
+| Two Pointers | Sort and shrink search space | `O(n log n)` | `O(n)` | Better, but not ideal |
 | Hash Map | Store seen values and lookup complement | `O(n)` | `O(n)` | Best standard solution |
 
 ---
@@ -126,32 +139,41 @@ flowchart LR
 
 ## Idea
 
-Try every possible pair and check whether their sum equals the target.
+Check every possible pair.
 
-This is simple, but inefficient.
+This is the most direct solution, but it becomes slow because every number may need to compare with many other numbers.
 
 ---
 
-## Brute Force Logic
+## Visual Logic
 
 ```mermaid
-flowchart TD
-    A["Start"] --> B["Pick first number<br/>nums[i]"]
-    B --> C["Pick second number<br/>nums[j]"]
-    C --> D{"nums[i] + nums[j] == target?"}
-    D -->|Yes| E["Return [i, j]"]
-    D -->|No| F["Try next pair"]
-    F --> C
+flowchart LR
+    subgraph Array["nums = [2, 7, 11, 15]"]
+        A["2<br/>i = 0"]
+        B["7<br/>j = 1"]
+        C["11<br/>j = 2"]
+        D["15<br/>j = 3"]
+    end
 
-    classDef neutral fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a;
-    classDef decision fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a;
+    A --> B
+    A --> C
+    A --> D
+
+    B -. next i .-> C
+    B -. next i .-> D
+
+    C -. next i .-> D
+
+    E["Every pair is checked<br/>This creates O(n²) work"]
+
+    D --> E
+
+    classDef base fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
     classDef bad fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
-    classDef success fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a;
 
-    class A,B,C neutral;
-    class D decision;
-    class F bad;
-    class E success;
+    class A,B,C,D base;
+    class E bad;
 ```
 
 ---
@@ -185,7 +207,7 @@ Space: O(1)
 
 ## Weakness
 
-The inner loop repeatedly searches for a matching number.
+The inner loop repeatedly searches for the second number.
 
 That repeated search is the bottleneck.
 
@@ -195,43 +217,43 @@ That repeated search is the bottleneck.
 
 ## Idea
 
-If the array is sorted, we can place one pointer at the beginning and one at the end.
+If the array is sorted, we can use two pointers:
 
-Then:
+- `left` points to the smallest value.
+- `right` points to the largest value.
+- If the sum is too small, move `left`.
+- If the sum is too large, move `right`.
 
-- If the sum is too small, move the left pointer.
-- If the sum is too large, move the right pointer.
-- If the sum equals the target, return the answer.
-
-However, sorting changes the original indices, so we must store each number with its original index before sorting.
+But since the problem asks for original indices, we must save indices before sorting.
 
 ---
 
-## Two-Pointer Logic
+## Pointer Movement
 
 ```mermaid
-flowchart TD
-    A["Original nums"] --> B["Pair each value<br/>with original index"]
-    B --> C["Sort by value"]
-    C --> D["left = 0<br/>right = n - 1"]
-    D --> E{"Current sum?"}
+stateDiagram-v2
+    [*] --> StoreOriginalIndex
+    StoreOriginalIndex --> SortByValue
+    SortByValue --> CompareSum
 
-    E -->|sum == target| F["Return original indices"]
-    E -->|sum < target| G["Move left →<br/>Need bigger sum"]
-    E -->|sum > target| H["Move right ←<br/>Need smaller sum"]
+    CompareSum --> Found: sum == target
+    CompareSum --> MoveLeft: sum < target
+    CompareSum --> MoveRight: sum > target
 
-    G --> E
-    H --> E
+    MoveLeft --> CompareSum: increase sum
+    MoveRight --> CompareSum: decrease sum
 
-    classDef setup fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a;
-    classDef decision fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a;
-    classDef move fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#0f172a;
-    classDef success fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a;
+    Found --> [*]
 
-    class A,B,C,D setup;
-    class E decision;
-    class G,H move;
-    class F success;
+    note right of StoreOriginalIndex
+        Sorting changes positions,
+        so original indices must be saved.
+    end note
+
+    note right of CompareSum
+        Two pointers make decisions
+        based on current sum.
+    end note
 ```
 
 ---
@@ -276,9 +298,9 @@ Space: O(n)
 
 ## Weakness
 
-Sorting is unnecessary for this problem.
+Sorting is unnecessary overhead.
 
-Since we already use extra memory to preserve original indices, we can use that memory more effectively with a hash map.
+Since we already use extra memory to preserve indices, we can use that memory more effectively with a hash map.
 
 ---
 
@@ -288,40 +310,46 @@ Since we already use extra memory to preserve original indices, we can use that 
 
 Use a hash map to remember numbers already seen.
 
-For each number:
+For every number:
 
 ```text
 complement = target - current_number
 ```
 
-If the complement already exists in the hash map, we found the answer.
+If the complement is already in the hash map, return the saved index and the current index.
 
 ---
 
-## Hash Map Logic
+## Hash Map Search Strategy
 
 ```mermaid
 flowchart TD
-    A["Start with empty hash map<br/>{}"] --> B["Read current number<br/>num"]
-    B --> C["Compute complement<br/>target - num"]
-    C --> D{"Is complement<br/>already in hash map?"}
+    subgraph CurrentStep["Current Number"]
+        A["num = 7"]
+        B["target = 9"]
+        C["complement = 9 - 7 = 2"]
+    end
 
-    D -->|Yes| E["Return<br/>[seen[complement], current_index]"]
-    D -->|No| F["Store current number<br/>seen[num] = index"]
-    F --> G["Move to next number"]
-    G --> B
+    subgraph Memory["Hash Map Memory"]
+        D["2 → index 0"]
+    end
 
-    classDef start fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a;
-    classDef process fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a;
+    C --> E{"Is complement 2<br/>inside hash map?"}
+    D --> E
+
+    E -->|Yes| F["Return [0, 1]"]
+    E -->|No| G["Store current number<br/>7 → index 1"]
+
+    classDef current fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
+    classDef memory fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
     classDef decision fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
     classDef success fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#0f172a;
-    classDef loop fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#0f172a;
 
-    class A start;
-    class B,C,F process;
-    class D decision;
-    class E success;
-    class G loop;
+    class A,B,C current;
+    class D memory;
+    class E decision;
+    class F success;
+    class G memory;
 ```
 
 ---
@@ -370,20 +398,20 @@ target = 9
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Array as nums
+    participant Array as Array nums
     participant Logic as Complement Logic
     participant Map as Hash Map
 
     Array->>Logic: Read nums[0] = 2
     Logic->>Logic: complement = 9 - 2 = 7
-    Logic->>Map: Is 7 stored?
+    Logic->>Map: Does 7 exist?
     Map-->>Logic: No
-    Logic->>Map: Store 2 → index 0
+    Logic->>Map: Store 2 → 0
 
     Array->>Logic: Read nums[1] = 7
     Logic->>Logic: complement = 9 - 7 = 2
-    Logic->>Map: Is 2 stored?
-    Map-->>Logic: Yes, 2 is at index 0
+    Logic->>Map: Does 2 exist?
+    Map-->>Logic: Yes, index 0
     Logic-->>Array: Return [0, 1]
 ```
 
@@ -392,32 +420,31 @@ sequenceDiagram
 # Why Hash Map Wins
 
 ```mermaid
-flowchart TD
-    subgraph BruteForce["Brute Force"]
-        A["For each number"]
-        B["Search remaining numbers"]
-        C["Repeated scanning"]
-        D["O(n²)"]
+flowchart TB
+    subgraph Slow["❌ Brute Force"]
+        A1["Pick first number"]
+        A2["Scan remaining numbers"]
+        A3["Repeat again and again"]
+        A4["O(n²) time"]
     end
 
-    subgraph HashMap["Hash Map"]
-        E["For each number"]
-        F["Calculate complement"]
-        G["Lookup instantly"]
-        H["O(n)"]
+    subgraph Fast["✅ Hash Map"]
+        B1["Pick current number"]
+        B2["Compute complement"]
+        B3["Lookup in hash map"]
+        B4["O(n) time"]
     end
 
-    A --> B --> C --> D
-    E --> F --> G --> H
+    A1 --> A2 --> A3 --> A4
+    B1 --> B2 --> B3 --> B4
 
-    D -. "Optimization Goal" .-> H
+    A4 -. "Remove repeated search" .-> B3
 
-    classDef slow fill:#fee2e2,stroke:#dc2626,stroke-width:3px,color:#111827;
-    classDef fast fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#111827;
-    classDef neutral fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#111827;
+    classDef slow fill:#fee2e2,stroke:#dc2626,stroke-width:3px,color:#0f172a;
+    classDef fast fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#0f172a;
 
-    class A,B,C,D slow;
-    class E,F,G,H fast;
+    class A1,A2,A3,A4 slow;
+    class B1,B2,B3,B4 fast;
 ```
 
 ---
@@ -426,7 +453,7 @@ flowchart TD
 
 ## 1. Using the Same Element Twice
 
-Check before inserting the current number:
+Always check before inserting:
 
 ```python
 if complement in seen:
@@ -435,13 +462,13 @@ if complement in seen:
 seen[num] = i
 ```
 
-This prevents using the same element twice.
+This prevents using the current element with itself.
 
 ---
 
 ## 2. Sorting Without Saving Original Indices
 
-If using the two-pointer method, save original indices first:
+If using two pointers, save original indices first:
 
 ```python
 indexed_nums = [(num, i) for i, num in enumerate(nums)]
@@ -464,21 +491,22 @@ Correct output:
 [0, 1]
 ```
 
-The hash map solution handles this correctly because it checks for the complement before storing the current number.
+The hash map approach handles this because it checks before inserting the current number.
 
 ---
 
 # Interview Explanation
 
 ```text
-I would start with brute force by checking every pair, which takes O(n²) time.
+I would first solve it with brute force by checking every pair.
+That takes O(n²) time.
 
 The bottleneck is repeatedly searching for the second number.
 
 To optimize, I calculate the exact complement needed for each number:
 target - current_number.
 
-I store previously seen numbers and their indices in a hash map.
+Then I store previously seen numbers and their indices in a hash map.
 
 If the complement already exists in the hash map, I return the stored index and current index.
 
@@ -515,19 +543,22 @@ class Solution:
 ```mermaid
 mindmap
   root((Two Sum))
+    Goal
+      Find two indices
+      Values sum to target
     Brute Force
-      Check every pair
-      Slow
-      O(n²)
+      Try every pair
+      Simple
+      Slow O(n²)
     Two Pointers
       Sort first
-      Preserve indices
-      O(n log n)
+      Move inward
+      Must preserve indices
     Hash Map
       Compute complement
       Store seen values
-      Fast lookup
-      O(n)
+      Lookup instantly
+      Optimal O(n)
 ```
 
 ---
@@ -536,13 +567,13 @@ mindmap
 
 - Brute force gives the baseline.
 - The bottleneck is repeated searching.
-- The key formula is:
+- The core formula is:
 
 ```text
 complement = target - current_number
 ```
 
-- A hash map changes the problem from repeated search to direct lookup.
+- Hash map changes the problem from repeated search to direct lookup.
 - The optimal solution uses:
 
 ```text
@@ -568,13 +599,13 @@ for item in collection:
     seen[item] = information
 ```
 
-Use this pattern when the problem involves:
+Use this pattern when a problem involves:
 
-- complements,
-- pairs,
-- duplicates,
-- frequencies,
-- previously seen values.
+- complements
+- pairs
+- duplicates
+- frequencies
+- previously seen values
 
 ---
 
