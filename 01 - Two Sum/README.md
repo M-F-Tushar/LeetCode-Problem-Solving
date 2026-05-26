@@ -1,4 +1,3 @@
-
 # 🧩 LeetCode #1 — Two Sum
 
 > **[Open on LeetCode →](https://leetcode.com/problems/two-sum/)**
@@ -106,7 +105,7 @@ timeline
     Solution 1 Brute Force
         : Try every pair of numbers
         : Simple nested loops
-        : O(n²) — too slow for large input
+        : O(n^2) — too slow for large input
 
     Solution 2 Two Pointers
         : Sort the array first
@@ -137,7 +136,7 @@ This is the most natural first instinct. Fix one number, loop over every other n
 
 ```mermaid
 flowchart LR
-    subgraph Array["nums = [2, 7, 11, 15], target = 9"]
+    subgraph Array["nums = 2, 7, 11, 15  |  target = 9"]
         N0["2\ni=0"]
         N1["7\nj=1"]
         N2["11\nj=2"]
@@ -221,20 +220,20 @@ The catch: sorting changes index positions, so I must save original indices befo
 stateDiagram-v2
     direction LR
     [*] --> SaveIndices
-    SaveIndices: Save original index with each value\n[(2,0),(7,1),(11,2),(15,3)]
+    SaveIndices: Save original index with each value
 
     SaveIndices --> SortByValue
-    SortByValue: Sort by value (indices travel with values)
+    SortByValue: Sort by value, indices travel with values
 
     SortByValue --> Compare
-    Compare: left=0, right=3\nsum = arr[left] + arr[right]
+    Compare: left=0, right=3, compute current sum
 
-    Compare --> Found: sum == target
-    Compare --> MoveLeft: sum < target → left++
-    Compare --> MoveRight: sum > target → right--
+    Compare --> Found: sum equals target
+    Compare --> MoveLeft: sum less than target
+    Compare --> MoveRight: sum greater than target
 
-    MoveLeft --> Compare
-    MoveRight --> Compare
+    MoveLeft --> Compare: left++
+    MoveRight --> Compare: right--
     Found --> [*]
 ```
 
@@ -249,18 +248,18 @@ sequenceDiagram
     participant R as right pointer
     participant C as Check
 
-    Note over L,R: sorted = [(2,0),(7,1),(11,2),(15,3)]
+    Note over L,R: sorted pairs with original indices preserved
 
-    L->>C: left=0 → value=2
-    R->>C: right=3 → value=15
-    C->>C: sum = 2+15 = 17 > 9 → move right left
+    L->>C: left=0, value=2
+    R->>C: right=3, value=15
+    C->>C: sum = 2+15 = 17 > 9, move right left
 
-    L->>C: left=0 → value=2
-    R->>C: right=2 → value=11
-    C->>C: sum = 2+11 = 13 > 9 → move right left
+    L->>C: left=0, value=2
+    R->>C: right=2, value=11
+    C->>C: sum = 2+11 = 13 > 9, move right left
 
-    L->>C: left=0 → value=2
-    R->>C: right=1 → value=7
+    L->>C: left=0, value=2
+    R->>C: right=1, value=7
     C->>C: sum = 2+7 = 9 == 9 ✅
 
     C-->>C: Return original indices [0, 1]
@@ -313,10 +312,10 @@ class Solution:
 
 ```mermaid
 flowchart TD
-    A["Two Pointers works ✅\nO(n log n) is better than O(n²)"] --> B["But we introduced sorting\nwhich is not free"]
+    A["Two Pointers works ✅\nO(n log n) is better than O(n^2)"] --> B["But we introduced sorting\nwhich is not free"]
     B --> C["And we already use O(n) extra memory\nto preserve original indices"]
     C --> D["Key question:\nWe're using O(n) memory anyway.\nCan we use it more cleverly\nto get O(n) time as well?"]
-    D --> E["New idea: use a hash map\nStore seen values → look up complement instantly\nNo sort needed at all"]
+    D --> E["New idea: use a hash map\nStore seen values, look up complement instantly\nNo sort needed at all"]
 
     style A fill:#dcfce7,stroke:#16a34a
     style B fill:#fee2e2,stroke:#dc2626
@@ -338,13 +337,13 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    subgraph Step1["i=0 → num=2"]
+    subgraph Step1["i=0, num=2"]
         A1["complement = 9 - 2 = 7"]
         A2{"Is 7 in seen?"}
-        A3["No → store seen = {2: 0}"]
+        A3["No, store seen = {2: 0}"]
     end
 
-    subgraph Step2["i=1 → num=7"]
+    subgraph Step2["i=1, num=7"]
         B1["complement = 9 - 7 = 2"]
         B2{"Is 2 in seen?"}
         B3["YES! Index 0 is stored"]
@@ -363,18 +362,18 @@ flowchart TD
 ```mermaid
 sequenceDiagram
     autonumber
-    participant A as nums = [2,7,11,15]
+    participant A as Array
     participant L as Loop Logic
-    participant M as Hash Map seen={}
+    participant M as Hash Map
 
     A->>L: i=0, num=2
     L->>L: complement = 9 - 2 = 7
     L->>M: Is 7 in map? No
-    L->>M: Store {2: 0}
+    L->>M: Store 2 at index 0
 
     A->>L: i=1, num=7
     L->>L: complement = 9 - 7 = 2
-    L->>M: Is 2 in map? YES → index 0
+    L->>M: Is 2 in map? YES, index 0
     L-->>A: Return [0, 1] ✅
 ```
 
@@ -418,7 +417,7 @@ class Solution:
 flowchart TB
     subgraph BF["Solution 1: Brute Force"]
         BF1["Nested loops"]
-        BF2["O(n²) time, O(1) space"]
+        BF2["O(n^2) time, O(1) space"]
         BF3["❌ Too slow for large n"]
     end
 
