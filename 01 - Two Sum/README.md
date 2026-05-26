@@ -52,8 +52,8 @@ mindmap
       Cannot reuse same element
       Any order is fine
     Core relationship
-      "nums[i] + nums[j] == target"
-      "Rearranged: j needs nums[j] == target - nums[i]"
+      nums-i plus nums-j equals target
+      Find j where nums-j equals target minus nums-i
 ```
 
 ---
