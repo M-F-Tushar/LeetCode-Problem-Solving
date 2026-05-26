@@ -1,4 +1,3 @@
-
 # 🔤 LeetCode #242 — Valid Anagram
 
 > **[Open on LeetCode →](https://leetcode.com/problems/valid-anagram/)**
@@ -66,8 +65,8 @@ mindmap
 flowchart LR
     A["Phase 1\nUnderstand the Problem\nWhat is an anagram?\nWhat edge cases exist?\nLength check first!"] --> B["Phase 2\nBuild the Solution\nSort-based baseline\nThen counting-based optimization"]
 
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
+    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -97,8 +96,8 @@ flowchart LR
     A["len(s) != len(t)?"] -- Yes --> B["Return False immediately\nCan't be anagrams\nif lengths differ"]
     A -- No --> C["Proceed to frequency check"]
 
-    style B fill:#fee2e2,stroke:#dc2626,stroke-width:2px
-    style C fill:#dcfce7,stroke:#16a34a
+    style B fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#000000
+    style C fill:#dcfce7,stroke:#16a34a,color:#000000
 ```
 
 This is a free O(1) optimization that eliminates many inputs immediately.
@@ -158,8 +157,8 @@ flowchart TD
     Cmp -- Yes --> True["Return True ✅"]
     Cmp -- No  --> False["Return False ❌"]
 
-    style True fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style False fill:#fee2e2,stroke:#dc2626
+    style True fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+    style False fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -224,9 +223,9 @@ flowchart TD
     B --> C["Key question:\nCan I check character frequencies\nwithout sorting?"]
     C --> D["New idea: count each character\nFor lowercase a-z, there are exactly 26 possibilities\nUse a fixed array of 26 slots\nO(n) time, O(1) space"]
 
-    style A fill:#dcfce7,stroke:#16a34a
-    style B fill:#fee2e2,stroke:#dc2626
-    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style A fill:#dcfce7,stroke:#16a34a,color:#000000
+    style B fill:#fee2e2,stroke:#dc2626,color:#000000
+    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -263,8 +262,8 @@ flowchart LR
         F["'g' → ord(103) - ord(97) = 6"]
     end
 
-    style I0 fill:#dbeafe,stroke:#2563eb
-    style I25 fill:#ede9fe,stroke:#7c3aed
+    style I0 fill:#dbeafe,stroke:#2563eb,color:#000000
+    style I25 fill:#ede9fe,stroke:#7c3aed,color:#000000
 ```
 
 ---
@@ -282,8 +281,8 @@ flowchart TD
     F -- Yes --> G["Return True ✅\nEvery addition was balanced by a subtraction"]
     F -- No  --> H["Return False ❌\nSome character count doesn't match"]
 
-    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style H fill:#fee2e2,stroke:#dc2626
+    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+    style H fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -345,9 +344,9 @@ flowchart TD
     C --> D["The fixed-array index would break or be incorrect"]
     D --> E["New idea: dynamic hash map\nLet the map grow to fit any character\nSame logic: increment s, decrement t\nCheck all zeros at the end\nO(n) time, O(k) space — works for everything"]
 
-    style A fill:#dcfce7,stroke:#16a34a
-    style B fill:#fee2e2,stroke:#dc2626
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style A fill:#dcfce7,stroke:#16a34a,color:#000000
+    style B fill:#fee2e2,stroke:#dc2626,color:#000000
+    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -382,8 +381,8 @@ flowchart TD
     F -- Yes --> G["Return True ✅"]
     F -- No  --> H["Return False ❌"]
 
-    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style H fill:#fee2e2,stroke:#dc2626
+    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+    style H fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -480,9 +479,9 @@ flowchart TB
 
     S1 --> S2 --> S3
 
-    style S1C fill:#fef3c7,stroke:#d97706
-    style S2C fill:#dcfce7,stroke:#16a34a,stroke-width:2px
-    style S3C fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style S1C fill:#fef3c7,stroke:#d97706,color:#000000
+    style S2C fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+    style S3C fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
