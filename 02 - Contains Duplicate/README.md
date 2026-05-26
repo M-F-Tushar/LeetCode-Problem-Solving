@@ -1,4 +1,3 @@
-
 # 🔁 LeetCode #217 — Contains Duplicate
 
 > **[Open on LeetCode →](https://leetcode.com/problems/contains-duplicate/)**
@@ -49,8 +48,8 @@ mindmap
 flowchart LR
     A["Phase 1\nUnderstand the Problem\nWhat does duplicate mean?\nWhat edge cases exist?"] --> B["Phase 2\nBuild the Solution\nNaive first\nRemove bottlenecks step by step"]
 
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
+    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -71,8 +70,8 @@ flowchart TD
     D --> A
     A --> E["Finished list? Return False"]
 
-    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style E fill:#fee2e2,stroke:#dc2626
+    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+    style E fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -133,8 +132,8 @@ flowchart LR
         P["For arrays with no duplicates,\nevery pair must be checked → O(n²)"]
     end
 
-    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style Issue fill:#fee2e2,stroke:#dc2626
+    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+    style Issue fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -176,9 +175,9 @@ flowchart TD
     B --> C["Key observation:\nDuplicates must have the same VALUE\nIf we SORT the array,\nduplicates will be NEXT TO EACH OTHER"]
     C --> D["New idea: sort first\nThen only check adjacent pairs\nNo inner scan needed"]
 
-    style A fill:#dcfce7,stroke:#16a34a
-    style B fill:#fee2e2,stroke:#dc2626
-    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style A fill:#dcfce7,stroke:#16a34a,color:#000000
+    style B fill:#fee2e2,stroke:#dc2626,color:#000000
+    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -208,7 +207,7 @@ flowchart TD
     C --> D["Compare adjacent pairs:\nnums[0] vs nums[1] → 1 == 1 ✅"]
     D --> E["Return True"]
 
-    style E fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style E fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -274,9 +273,9 @@ flowchart TD
     C --> D["Key insight:\nWe don't need sorted order\nWe just need to remember what we've seen\nand check instantly as we scan"]
     D --> E["New idea: HashSet\nFor each element, ask 'seen before?'\nIf yes → duplicate\nIf no → remember it\nOne pass, O(n)"]
 
-    style A fill:#dcfce7,stroke:#16a34a
-    style B fill:#fee2e2,stroke:#dc2626
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style A fill:#dcfce7,stroke:#16a34a,color:#000000
+    style B fill:#fee2e2,stroke:#dc2626,color:#000000
+    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -327,7 +326,7 @@ flowchart LR
     Check -- Yes --> Found["Duplicate → True ✅"]
     Check -- No  --> Store["Store 1 in bucket\nContinue"]
 
-    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 A Python `set` resolves membership in **O(1) average time** regardless of how many items are in it.
@@ -379,7 +378,7 @@ flowchart LR
     A["nums = [1,2,3,1]\nlen = 4"] --> B["set(nums) = {1,2,3}\nlen = 3"]
     B --> C["4 != 3 → True\nA duplicate was removed by the set"]
 
-    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -408,9 +407,9 @@ flowchart TB
 
     BF --> SO --> HS
 
-    style BF3 fill:#fee2e2,stroke:#dc2626
-    style SO3 fill:#fef3c7,stroke:#d97706
-    style HS3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style BF3 fill:#fee2e2,stroke:#dc2626,color:#000000
+    style SO3 fill:#fef3c7,stroke:#d97706,color:#000000
+    style HS3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
