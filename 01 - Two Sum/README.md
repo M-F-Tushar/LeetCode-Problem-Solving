@@ -1,4 +1,3 @@
-
 # 🧩 LeetCode #1 — Two Sum
 
 > **[Open on LeetCode →](https://leetcode.com/problems/two-sum/)**
@@ -53,8 +52,8 @@ mindmap
       Cannot reuse same element
       Any order is fine
     Core relationship
-      nums[i] + nums[j] == target
-      Rearranged: j needs nums[j] == target - nums[i]
+      "nums[i] + nums[j] == target"
+      "Rearranged: j needs nums[j] == target - nums[i]"
 ```
 
 ---
@@ -65,8 +64,8 @@ mindmap
 flowchart LR
     A["Phase 1\nUnderstand the Problem\nWhat is asked?\nWhat are the constraints?"] --> B["Phase 2\nBuild the Solution\nStart simple\nOptimize from there"]
 
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
+    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
 ```
 
 We always start in **Phase 1** — reading slowly, restating the problem, identifying what the output looks like. Only then do we enter **Phase 2** — writing code, improving it, and proving why each step up is better.
@@ -91,8 +90,8 @@ flowchart TD
     C -- Yes --> D["Return both indices ✅"]
     C -- No  --> E["Remember that I saw 2\nMove to next number"]
 
-    style D fill:#dcfce7,stroke:#16a34a,stroke-width:3px
-    style E fill:#fef3c7,stroke:#d97706
+    style D fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+    style E fill:#fef3c7,stroke:#d97706,color:#000000
 ```
 
 ---
@@ -154,7 +153,7 @@ flowchart LR
     Found["nums[0]+nums[1] = 2+7 = 9 ✅\nReturn [0, 1]"]
     N1 --> Found
 
-    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -197,9 +196,9 @@ flowchart TD
     C --> D["Key question:\nDo we need to scan everything?\nOr can we narrow the search space?"]
     D --> E["New idea: sort the array\nUse two pointers to shrink the search range"]
 
-    style A fill:#dcfce7,stroke:#16a34a
-    style B fill:#fee2e2,stroke:#dc2626
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style A fill:#dcfce7,stroke:#16a34a,color:#000000
+    style B fill:#fee2e2,stroke:#dc2626,color:#000000
+    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -318,9 +317,9 @@ flowchart TD
     C --> D["Key question:\nWe're using O(n) memory anyway.\nCan we use it more cleverly\nto get O(n) time as well?"]
     D --> E["New idea: use a hash map\nStore seen values → look up complement instantly\nNo sort needed at all"]
 
-    style A fill:#dcfce7,stroke:#16a34a
-    style B fill:#fee2e2,stroke:#dc2626
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style A fill:#dcfce7,stroke:#16a34a,color:#000000
+    style B fill:#fee2e2,stroke:#dc2626,color:#000000
+    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -353,7 +352,7 @@ flowchart TD
 
     A1 --> A2 --> A3 --> B1 --> B2 --> B3 --> B4
 
-    style B4 fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style B4 fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -363,9 +362,9 @@ flowchart TD
 ```mermaid
 sequenceDiagram
     autonumber
-    participant A as nums = [2,7,11,15]
+    participant A as "nums = [2,7,11,15]"
     participant L as Loop Logic
-    participant M as Hash Map seen={}
+    participant M as "Hash Map seen={}"
 
     A->>L: i=0, num=2
     L->>L: complement = 9 - 2 = 7
@@ -436,9 +435,9 @@ flowchart TB
 
     BF --> TP --> HM
 
-    style BF3 fill:#fee2e2,stroke:#dc2626
-    style TP3 fill:#fef3c7,stroke:#d97706
-    style HM3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style BF3 fill:#fee2e2,stroke:#dc2626,color:#000000
+    style TP3 fill:#fef3c7,stroke:#d97706,color:#000000
+    style HM3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
