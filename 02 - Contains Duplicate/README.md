@@ -1,650 +1,349 @@
-# LeetCode #217: Contains Duplicate — Strategic Study Guide
 
-> **Problem Link:** [LeetCode #217 — Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
+# 🔁 LeetCode #217 — Contains Duplicate
 
----
-
-## Problem
-
-Given an integer array `nums`, return `true` if any value appears at least twice in the array.
-
-Return `false` if every element is distinct.
+> **[Open on LeetCode →](https://leetcode.com/problems/contains-duplicate/)**
+> **Difficulty:** Easy | **Topic:** Array, Hash Set, Sorting
 
 ---
 
-## Example
+## 📋 Problem Statement
 
-```text
-Input:
-nums = [1, 2, 3, 1]
+Given an integer array `nums`, return `true` if any value appears **at least twice** in the array.
 
-Output:
-true
+Return `false` if every element is **distinct**.
 
-Explanation:
-The value 1 appears more than once.
+---
+
+## 📌 Examples
+
 ```
-
-```text
-Input:
-nums = [1, 2, 3, 4]
-
-Output:
-false
-
-Explanation:
-Every element is distinct.
+Input:  [1, 2, 3, 1]   →   true    (1 appears at index 0 and 3)
+Input:  [1, 2, 3, 4]   →   false   (all elements are unique)
+Input:  [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]   →   true
 ```
 
 ---
 
-## Rules
-
-- A duplicate exists if any value appears at least twice.
-- If all elements are unique, return `false`.
-- Return type is Boolean:
-
-```text
-true / false
-```
-
----
-
-# Core Insight
-
-This problem is about detecting repeated values.
-
-The direct question is:
-
-```text
-Have I seen this number before?
-```
-
-If yes, then a duplicate exists.
-
-If no, remember the number and continue scanning.
-
----
-
-# Problem-Solving Evolution
+## 🗺️ Understanding the Problem First
 
 ```mermaid
-timeline
-    title Evolution of Thinking for Contains Duplicate
-
-    Brute Force
-        : Compare every pair
-        : Uses no extra memory
-        : Too slow for large input
-
-    Sorting
-        : Rearrange values
-        : Equal values become neighbors
-        : Faster, but changes order
-
-    HashSet
-        : Remember seen values
-        : Check duplicates instantly
-        : Best standard solution
+mindmap
+  root((Contains Duplicate))
+    Given
+      An array of integers
+    Return
+      true if ANY value appears more than once
+      false if ALL values are unique
+    Core question
+      Have I seen this number before in this list?
+    What I need
+      A way to remember what I have already seen
+      A fast way to check membership
 ```
 
 ---
 
-# Strategic Decision Flow
+## 🧭 The Two Phases of Solving
+
+```mermaid
+flowchart LR
+    A["Phase 1\nUnderstand the Problem\nWhat does duplicate mean?\nWhat edge cases exist?"] --> B["Phase 2\nBuild the Solution\nNaive first\nRemove bottlenecks step by step"]
+
+    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px
+    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+```
+
+---
+
+## 🔑 Core Insight Before Any Code
+
+This is a **membership detection** problem. The one question we answer repeatedly is:
+
+```
+"Have I seen this number before?"
+```
 
 ```mermaid
 flowchart TD
-    A["🧩 Problem<br/>Detect whether any value appears more than once"] --> B["🪓 Baseline<br/>Compare every pair"]
+    A["Read a number from the list"] --> B{"Is it already in my memory?"}
+    B -- Yes --> C["🎉 Duplicate! Return True"]
+    B -- No  --> D["Add it to memory\nContinue scanning"]
+    D --> A
+    A --> E["Finished list? Return False"]
 
-    B --> C{"⚠️ Bottleneck?"}
-    C --> D["Repeated scanning<br/>Same values are checked again and again"]
-
-    D --> E{"Can structure help?"}
-
-    E --> F["📚 Sorting<br/>Force equal values to become neighbors"]
-    F --> G["Compare adjacent values only"]
-
-    G --> H{"Can we do better than<br/>O(n log n)?"}
-
-    H --> I["🧠 Use memory<br/>Track values already seen"]
-
-    I --> J["📦 HashSet<br/>O(1) average lookup"]
-
-    J --> K["🚀 Optimal Result<br/>Time: O(n)<br/>Space: O(n)"]
-
-    classDef problem fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
-    classDef danger fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
-    classDef insight fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
-    classDef optimize fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a;
-    classDef final fill:#ede9fe,stroke:#7c3aed,stroke-width:3px,color:#0f172a;
-
-    class A,B problem;
-    class C,D danger;
-    class E,F,G,H insight;
-    class I,J optimize;
-    class K final;
+    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style E fill:#fee2e2,stroke:#dc2626
 ```
 
 ---
 
-# Approach Trade-Off
+## 📊 Solution Progression Overview
 
 ```mermaid
-quadrantChart
-    title Contains Duplicate Approach Trade-Off
-    x-axis Low Extra Memory --> High Extra Memory
-    y-axis Slow Runtime --> Fast Runtime
+timeline
+    title From First Idea to Optimal Solution
 
-    quadrant-1 Fast but More Memory
-    quadrant-2 Best Practical Zone
-    quadrant-3 Worst Zone
-    quadrant-4 Low Memory but Slow
+    Solution 1 Brute Force
+        : Compare every element with every other
+        : O(n²) time, O(1) space
+        : Too slow for large arrays
 
-    Brute Force: [0.15, 0.20]
-    Sorting: [0.40, 0.65]
-    HashSet: [0.75, 0.90]
+    Solution 2 Sorting
+        : Sort so duplicates become neighbors
+        : Only compare adjacent elements
+        : O(n log n) — better, but still not linear
+
+    Solution 3 Hash Set
+        : Track seen values as we scan
+        : Check membership instantly
+        : O(n) time — optimal
 ```
 
 ---
+---
 
-# High-Level Comparison
+# ✏️ Solution 1 — Brute Force
 
-| Approach | Core Strategy | Time | Space | Verdict |
-|---|---|---:|---:|---|
-| Brute Force | Compare all pairs | `O(n²)` | `O(1)` | Simple but slow |
-| Sorting | Sort, then compare neighbors | `O(n log n)` | `O(1)` or `O(n)` | Better, but may modify input |
-| HashSet | Store seen values and check instantly | `O(n)` | `O(n)` | Best standard solution |
+## Thinking From This Perspective
+
+**My starting thought:** *"I need to know if any two elements are equal. The simplest thing: pick each element, compare it to every element after it. If any two match, return true."*
+
+No data structures needed. Just two loops.
 
 ---
 
-# 1. Brute Force Approach
-
-## Idea
-
-Compare every element with every other element after it.
-
-If any two values are equal, return `true`.
-
-This is the simplest possible solution, but it does too much repeated work.
-
----
-
-## Visual Logic
+## Visual — What Brute Force Does
 
 ```mermaid
 flowchart LR
     subgraph Array["nums = [1, 2, 3, 1]"]
-        A["1<br/>i = 0"]
-        B["2<br/>j = 1"]
-        C["3<br/>j = 2"]
-        D["1<br/>j = 3"]
+        N0["1\ni=0"]
+        N1["2\nj=1"]
+        N2["3\nj=2"]
+        N3["1\nj=3"]
     end
 
-    A --> B
-    A --> C
-    A --> D
+    N0 --> N1
+    N0 --> N2
+    N0 --> N3
 
-    D --> E["Duplicate found<br/>nums[0] == nums[3]"]
+    N3 --> Found["nums[0] == nums[3] == 1\nDuplicate found! Return True ✅"]
 
-    F["Problem:<br/>In the worst case,<br/>every pair is checked"]
+    subgraph Issue["The problem"]
+        P["For arrays with no duplicates,\nevery pair must be checked → O(n²)"]
+    end
 
-    E --> F
-
-    classDef normal fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
-    classDef duplicate fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#0f172a;
-    classDef warning fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
-
-    class A,B,C normal;
-    class D,E duplicate;
-    class F warning;
-```
-
----
-
-## Algorithm
-
-1. Use an outer loop at index `i`.
-2. Use an inner loop at index `j = i + 1`.
-3. Compare:
-
-```python
-nums[i] == nums[j]
-```
-
-4. If equal, return `True`.
-5. If no duplicate is found, return `False`.
-
----
-
-## Code
-
-```python
-from typing import List
-
-
-class Solution:
-    def containsDuplicate_brute_force(self, nums: List[int]) -> bool:
-        n = len(nums)
-
-        for i in range(n):
-            for j in range(i + 1, n):
-                if nums[i] == nums[j]:
-                    return True
-
-        return False
+    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+    style Issue fill:#fee2e2,stroke:#dc2626
 ```
 
 ---
 
 ## Complexity
 
-```text
-Time:  O(n²)
-Space: O(1)
+```
+Time:  O(n²)  — every element is compared with every element after it
+Space: O(1)   — no extra data structures
 ```
 
 ---
 
-## Weakness
+## ✅ Full LeetCode Solution — Brute Force
 
-The nested loop creates too many comparisons.
+```python
+from typing import List
 
-If the array is large and all elements are distinct, the algorithm must check almost every possible pair.
 
-That makes it inefficient for large inputs.
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        n = len(nums)
 
----
+        for i in range(n):                     # fix one element
+            for j in range(i + 1, n):          # compare with every element after it
+                if nums[i] == nums[j]:
+                    return True                # duplicate found
 
-# 2. Sorting Approach
-
-## Idea
-
-If duplicate values exist, sorting forces them to stand next to each other.
-
-Example:
-
-```text
-Before sorting:
-[3, 1, 4, 1, 5]
-
-After sorting:
-[1, 1, 3, 4, 5]
-```
-
-Now duplicate detection becomes simple:
-
-```text
-Check neighboring values.
+        return False                           # no duplicates found
 ```
 
 ---
 
-## Sorting Transformation
+## Why I Move to the Next Solution
 
 ```mermaid
 flowchart TD
-    A["Original Array<br/>[3, 1, 4, 1, 5]"] --> B["Sort Values"]
+    A["Brute Force is correct ✅"] --> B["But the inner loop repeats work\nFor each element, we scan many others"]
+    B --> C["Key observation:\nDuplicates must have the same VALUE\nIf we SORT the array,\nduplicates will be NEXT TO EACH OTHER"]
+    C --> D["New idea: sort first\nThen only check adjacent pairs\nNo inner scan needed"]
 
-    B --> C["Sorted Array<br/>[1, 1, 3, 4, 5]"]
+    style A fill:#dcfce7,stroke:#16a34a
+    style B fill:#fee2e2,stroke:#dc2626
+    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px
+```
 
-    C --> D{"Any adjacent values equal?"}
+---
+---
 
-    D -->|Yes| E["Duplicate exists"]
-    D -->|No| F["All values are distinct"]
+# ✏️ Solution 2 — Sorting
 
-    classDef input fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
-    classDef process fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
-    classDef decision fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
-    classDef success fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#0f172a;
+## Thinking From This Perspective
 
-    class A input;
-    class B,C process;
-    class D decision;
-    class E,F success;
+**My new thought:** *"Duplicates are equal values. If equal values are guaranteed to be neighbors after sorting, I only need to check adjacent pairs — no inner loop at all."*
+
+```
+Before sort: [3, 1, 4, 1, 5]
+After sort:  [1, 1, 3, 4, 5]
+                ↑↑
+           duplicates are now adjacent
 ```
 
 ---
 
-## State View
+## Visual — Sorting Brings Duplicates Together
+
+```mermaid
+flowchart TD
+    A["Original: [3, 1, 4, 1, 5]"] --> B["Sort in place"]
+    B --> C["Sorted: [1, 1, 3, 4, 5]"]
+    C --> D["Compare adjacent pairs:\nnums[0] vs nums[1] → 1 == 1 ✅"]
+    D --> E["Return True"]
+
+    style E fill:#dcfce7,stroke:#16a34a,stroke-width:3px
+```
+
+---
+
+## State View of the Algorithm
 
 ```mermaid
 stateDiagram-v2
-    [*] --> UnsortedArray
-    UnsortedArray --> SortedArray: sort nums
-    SortedArray --> CompareNeighbors
+    [*] --> SortArray
+    SortArray: Sort nums in place
 
-    CompareNeighbors --> DuplicateFound: nums[i] == nums[i + 1]
-    CompareNeighbors --> KeepScanning: nums[i] != nums[i + 1]
+    SortArray --> ScanNeighbors
+    ScanNeighbors: Compare nums[i] with nums[i+1]
 
-    KeepScanning --> CompareNeighbors
-    DuplicateFound --> [*]
+    ScanNeighbors --> DuplicateFound: nums[i] == nums[i+1]
+    ScanNeighbors --> NextPair: nums[i] != nums[i+1]
 
-    CompareNeighbors --> AllDistinct: scan completes
-    AllDistinct --> [*]
+    NextPair --> ScanNeighbors: i++
+    DuplicateFound --> ReturnTrue: return True
 
-    note right of SortedArray
-        Sorting groups equal values together.
-    end note
+    ScanNeighbors --> ReturnFalse: scan complete, no match
 
-    note right of CompareNeighbors
-        Only adjacent values need comparison.
-    end note
-```
-
----
-
-## Algorithm
-
-1. Sort the array.
-2. Loop from index `0` to `n - 2`.
-3. Compare each value with its next neighbor:
-
-```python
-nums[i] == nums[i + 1]
-```
-
-4. If equal, return `True`.
-5. If the scan completes, return `False`.
-
----
-
-## Code
-
-```python
-from typing import List
-
-
-class Solution:
-    def containsDuplicate_sorting(self, nums: List[int]) -> bool:
-        nums.sort()
-
-        for i in range(len(nums) - 1):
-            if nums[i] == nums[i + 1]:
-                return True
-
-        return False
+    ReturnTrue --> [*]
+    ReturnFalse --> [*]
 ```
 
 ---
 
 ## Complexity
 
-```text
-Time:  O(n log n)
-Space: O(1) or O(n), depending on sorting implementation
+```
+Time:  O(n log n)  — dominated by sorting
+Space: O(1)        — sort in place (or O(n) if input must be preserved)
 ```
 
 ---
 
-## Weakness
+## ✅ Full LeetCode Solution — Sorting
 
-Sorting improves runtime compared to brute force, but it has two issues:
+```python
+from typing import List
 
-1. It may modify the original input order.
-2. It is still slower than the HashSet approach.
 
-If we can use extra memory, we can solve the problem in linear time.
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        nums.sort()                            # bring equal values next to each other
 
----
+        for i in range(len(nums) - 1):         # check each adjacent pair
+            if nums[i] == nums[i + 1]:
+                return True                    # neighbors are equal → duplicate
 
-# 3. HashSet Approach
-
-## Idea
-
-Use a set to remember every value already seen.
-
-For each number, ask:
-
-```text
-Have I seen this before?
+        return False                           # all neighbors differ → no duplicates
 ```
 
-If yes, return `true`.
-
-If no, store it and keep going.
-
 ---
 
-## HashSet Memory Model
+## Why I Move to the Next Solution
 
 ```mermaid
 flowchart TD
-    subgraph Current["Current Scan"]
-        A["Read num"]
-        B["Ask:<br/>Is num in seen?"]
-    end
+    A["Sorting works ✅\nO(n log n) is much better than O(n²)"] --> B["But sorting modifies the original array\nThat may not always be acceptable"]
+    B --> C["And we still do O(n log n) work\neven though the answer might be on the second element"]
+    C --> D["Key insight:\nWe don't need sorted order\nWe just need to remember what we've seen\nand check instantly as we scan"]
+    D --> E["New idea: HashSet\nFor each element, ask 'seen before?'\nIf yes → duplicate\nIf no → remember it\nOne pass, O(n)"]
 
-    subgraph Memory["HashSet Memory"]
-        C["seen = {previous values}"]
-    end
-
-    A --> B
-    C --> B
-
-    B -->|Yes| D["Duplicate found<br/>Return true"]
-    B -->|No| E["Add num to seen"]
-    E --> F["Move to next number"]
-    F --> A
-
-    classDef scan fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
-    classDef memory fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
-    classDef success fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#0f172a;
-    classDef loop fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#0f172a;
-
-    class A,B scan;
-    class C,E memory;
-    class D success;
-    class F loop;
+    style A fill:#dcfce7,stroke:#16a34a
+    style B fill:#fee2e2,stroke:#dc2626
+    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px
 ```
 
 ---
+---
 
-## Walkthrough Example
+# ✏️ Solution 3 — Hash Set (Optimal)
 
-Given:
+## Thinking From This Perspective
 
-```text
-nums = [1, 2, 3, 1]
-```
+**My final thought:** *"I don't need to sort anything. As I scan left to right, I keep a set of everything I've already seen. For each new number — is it already in the set? If yes: duplicate. If no: add it and continue. One pass. Done."*
+
+---
+
+## Visual — How the Set Grows
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Array as nums
-    participant Logic as Duplicate Check
-    participant Set as HashSet seen
+    participant A as nums = [1,2,3,1]
+    participant L as Loop Logic
+    participant S as Set (seen)
 
-    Array->>Logic: Read 1
-    Logic->>Set: Is 1 in seen?
-    Set-->>Logic: No
-    Logic->>Set: Add 1
+    A->>L: Read 1
+    L->>S: Is 1 in seen? No
+    L->>S: Add 1 → seen = {1}
 
-    Array->>Logic: Read 2
-    Logic->>Set: Is 2 in seen?
-    Set-->>Logic: No
-    Logic->>Set: Add 2
+    A->>L: Read 2
+    L->>S: Is 2 in seen? No
+    L->>S: Add 2 → seen = {1,2}
 
-    Array->>Logic: Read 3
-    Logic->>Set: Is 3 in seen?
-    Set-->>Logic: No
-    Logic->>Set: Add 3
+    A->>L: Read 3
+    L->>S: Is 3 in seen? No
+    L->>S: Add 3 → seen = {1,2,3}
 
-    Array->>Logic: Read 1
-    Logic->>Set: Is 1 in seen?
-    Set-->>Logic: Yes
-    Logic-->>Array: Return true
+    A->>L: Read 1
+    L->>S: Is 1 in seen? YES!
+    L-->>A: Return True ✅
 ```
 
 ---
 
-## Algorithm
+## Internal Set Mechanics (Simplified)
 
-1. Create an empty set:
+```mermaid
+flowchart LR
+    Num["Incoming: 1"] --> Hash["hash(1) → bucket location"]
+    Hash --> Check{"Is that bucket\nalready occupied by 1?"}
+    Check -- Yes --> Found["Duplicate → True ✅"]
+    Check -- No  --> Store["Store 1 in bucket\nContinue"]
 
-```python
-seen = set()
+    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px
 ```
 
-2. Iterate through every number in `nums`.
-3. If the number is already in `seen`, return `True`.
-4. Otherwise, add the number to `seen`.
-5. If the loop finishes, return `False`.
-
----
-
-## Code
-
-```python
-from typing import List
-
-
-class Solution:
-    def containsDuplicate(self, nums: List[int]) -> bool:
-        seen = set()
-
-        for num in nums:
-            if num in seen:
-                return True
-
-            seen.add(num)
-
-        return False
-```
+A Python `set` resolves membership in **O(1) average time** regardless of how many items are in it.
 
 ---
 
 ## Complexity
 
-```text
-Time:  O(n)
-Space: O(n)
+```
+Time:  O(n)   — single pass, O(1) set lookup per element
+Space: O(n)   — set grows to at most n elements
 ```
 
 ---
 
-## Why HashSet Is Optimal
-
-The brute force approach repeatedly searches through the array.
-
-The sorting approach rearranges the array to make duplicates easier to find.
-
-The HashSet approach avoids both problems.
-
-It remembers values as it scans, allowing duplicate checks in average constant time.
-
-```mermaid
-flowchart TB
-    subgraph Slow["❌ Brute Force"]
-        A1["Pick a value"]
-        A2["Compare with many others"]
-        A3["Repeat repeatedly"]
-        A4["O(n²)"]
-    end
-
-    subgraph Medium["⚠️ Sorting"]
-        B1["Sort array"]
-        B2["Compare neighbors"]
-        B3["May mutate input"]
-        B4["O(n log n)"]
-    end
-
-    subgraph Fast["✅ HashSet"]
-        C1["Scan once"]
-        C2["Check seen set"]
-        C3["Return on first repeat"]
-        C4["O(n)"]
-    end
-
-    A1 --> A2 --> A3 --> A4
-    B1 --> B2 --> B3 --> B4
-    C1 --> C2 --> C3 --> C4
-
-    A4 -. "Remove nested scans" .-> C2
-    B4 -. "Avoid sorting cost" .-> C2
-
-    classDef slow fill:#fee2e2,stroke:#dc2626,stroke-width:3px,color:#0f172a;
-    classDef medium fill:#fef3c7,stroke:#d97706,stroke-width:3px,color:#0f172a;
-    classDef fast fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#0f172a;
-
-    class A1,A2,A3,A4 slow;
-    class B1,B2,B3,B4 medium;
-    class C1,C2,C3,C4 fast;
-```
-
----
-
-# Common Mistakes
-
-## 1. Returning `False` Too Early
-
-Incorrect idea:
-
-```python
-for num in nums:
-    if num not in seen:
-        return False
-```
-
-This is wrong because one unique value does not prove that the entire array is distinct.
-
-You can only return `False` after scanning all elements.
-
----
-
-## 2. Sorting When Input Order Matters
-
-The sorting approach can modify the original array:
-
-```python
-nums.sort()
-```
-
-If the original order must be preserved, use:
-
-```python
-sorted_nums = sorted(nums)
-```
-
-or prefer the HashSet approach.
-
----
-
-## 3. Confusing Set With Dictionary
-
-For this problem, we only need to know whether a value exists.
-
-So a set is enough:
-
-```python
-seen = set()
-```
-
-A dictionary is unnecessary unless we need counts or indices.
-
----
-
-# Interview Explanation
-
-```text
-I would first consider the brute force solution, where every pair is compared.
-That takes O(n²) time and O(1) space.
-
-The bottleneck is repeated comparison.
-
-A better option is sorting. After sorting, duplicates become adjacent, so I only need to compare neighbors.
-That takes O(n log n) time.
-
-The optimal solution is to use a HashSet.
-As I scan the array, I store each value I have already seen.
-If I encounter a value that is already in the set, I return true immediately.
-If I finish scanning without finding a repeat, I return false.
-
-This gives O(n) time and O(n) space.
-```
-
----
-
-# Final Recommended Solution
+## ✅ Full LeetCode Solution — Hash Set
 
 ```python
 from typing import List
@@ -652,20 +351,19 @@ from typing import List
 
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
-        seen = set()
+        seen = set()                   # our memory of visited values
 
         for num in nums:
-            if num in seen:
+            if num in seen:            # have we seen this before?
                 return True
+            seen.add(num)              # no → remember it
 
-            seen.add(num)
-
-        return False
+        return False                   # scanned everything, no duplicate
 ```
 
 ---
 
-# Pythonic One-Liner
+## Bonus — Pythonic One-Liner
 
 ```python
 from typing import List
@@ -676,98 +374,71 @@ class Solution:
         return len(nums) != len(set(nums))
 ```
 
-## Why It Works
+```mermaid
+flowchart LR
+    A["nums = [1,2,3,1]\nlen = 4"] --> B["set(nums) = {1,2,3}\nlen = 3"]
+    B --> C["4 != 3 → True\nA duplicate was removed by the set"]
 
-If duplicates exist, converting the list into a set removes repeated values.
-
-So:
-
-```text
-len(nums) != len(set(nums))
+    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px
 ```
-
-means at least one duplicate was removed.
 
 ---
 
-# Final Mental Model
+## Full Comparison
 
 ```mermaid
-mindmap
-  root((Contains Duplicate))
-    Goal
-      Detect repeated value
-      Return boolean
-    Brute Force
-      Compare all pairs
-      No extra memory
-      Slow O(n²)
-    Sorting
-      Group equal values
-      Check neighbors
-      O(n log n)
-    HashSet
-      Remember seen values
-      Instant lookup
-      Optimal O(n)
+flowchart TB
+    subgraph BF["Solution 1: Brute Force"]
+        BF1["Nested loop — compare all pairs"]
+        BF2["O(n²) time, O(1) space"]
+        BF3["❌ Slow for large input"]
+    end
+
+    subgraph SO["Solution 2: Sorting"]
+        SO1["Sort → check neighbors"]
+        SO2["O(n log n) time, O(1) space"]
+        SO3["⚠️ Better, but modifies input\nand can't early-exit from sort"]
+    end
+
+    subgraph HS["Solution 3: Hash Set"]
+        HS1["One pass, track seen values"]
+        HS2["O(n) time, O(n) space"]
+        HS3["✅ Optimal — this is the answer"]
+    end
+
+    BF --> SO --> HS
+
+    style BF3 fill:#fee2e2,stroke:#dc2626
+    style SO3 fill:#fef3c7,stroke:#d97706
+    style HS3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px
 ```
 
 ---
 
-# Key Takeaways
-
-- Brute force proves correctness but is too slow.
-- Sorting groups duplicates together.
-- HashSet avoids both nested loops and sorting.
-- The key question is:
-
-```text
-Have I seen this value before?
-```
-
-- The optimal standard solution uses:
-
-```text
-Time:  O(n)
-Space: O(n)
-```
-
----
-
-# Pattern Learned
-
-Contains Duplicate teaches the **Seen Set Pattern**.
+## 🔁 The Reusable Pattern
 
 ```python
+# Seen Set Pattern — use whenever the question is "have I seen this before?"
 seen = set()
-
 for item in collection:
     if item in seen:
-        return True
-
+        return True          # revisit / duplicate detected
     seen.add(item)
-
 return False
 ```
 
-Use this pattern when a problem asks whether something has appeared before.
-
-Common use cases:
-
-- duplicate detection
-- repeated characters
-- visited states
-- cycle detection
-- membership tracking
-- uniqueness validation
+Apply this pattern to: **duplicate detection, cycle detection, visited-state tracking, uniqueness checks.**
 
 ---
 
-# Final Thought
+## ✅ Final Takeaways
 
-Contains Duplicate is simple, but it teaches a major algorithmic principle:
-
-```text
-If the question is "Have I seen this before?",
-use memory to answer instantly.
 ```
+1. This is a membership detection problem
+2. One key question: "Have I seen this before?"
+3. A set answers that in O(1)
+4. Progression: O(n²) → O(n log n) → O(n)
+5. Each step removes one unnecessary scan
+```
+
+> 💡 Whenever a problem asks "has this appeared before?" — reach for a set.
