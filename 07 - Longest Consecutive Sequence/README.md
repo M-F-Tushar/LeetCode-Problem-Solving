@@ -23,9 +23,9 @@ Given an unsorted array of integers `nums`, return the length of the **longest c
 flowchart TD
     INPUT(["Input: unsorted integer array nums"]) --> Q{"Find the LONGEST\nconsecutive sequence"}
     Q --> DEF["Consecutive sequence:\nnumbers forming an unbroken\nchain incrementing by 1"]
-    DEF --> EX1["YES: [1, 2, 3, 4] — length 4"]
-    DEF --> EX2["YES: [7, 8, 9] — length 3"]
-    DEF --> EX3["NO: [1, 3, 5] — has gaps"]
+    DEF --> EX1["YES: [1, 2, 3, 4]  -  length 4"]
+    DEF --> EX2["YES: [7, 8, 9]  -  length 3"]
+    DEF --> EX3["NO: [1, 3, 5]  -  has gaps"]
     EX1 & EX2 & EX3 --> KEY["Numbers need NOT be adjacent in nums\nThey just need to EXIST in nums"]
     KEY --> BLOCK["CRITICAL CONSTRAINT:\nMust run in O(n) time\nSorting O(n log n) is disqualified"]
     BLOCK --> OUT(["Return the length of the longest sequence"])
@@ -78,22 +78,22 @@ Longest = 4
 
 ```mermaid
 timeline
-    title Manual Walkthrough — nums = [100, 4, 200, 1, 3, 2]
+    title Manual Walkthrough  -  nums = [100, 4, 200, 1, 3, 2]
     section Start from 100
-        Check 101 : not in array — sequence [100]  length 1
+        Check 101 : not in array  -  sequence [100]  length 1
     section Start from 4
-        Check 5 : not in array — sequence [4]  length 1
+        Check 5 : not in array  -  sequence [4]  length 1
     section Start from 200
-        Check 201 : not in array — sequence [200]  length 1
-    section Start from 1 — The Winner
-        Check 2 : found — length 2
-        Check 3 : found — length 3
-        Check 4 : found — length 4
-        Check 5 : not found — stop — sequence [1 2 3 4]  longest = 4
+        Check 201 : not in array  -  sequence [200]  length 1
+    section Start from 1  -  The Winner
+        Check 2 : found  -  length 2
+        Check 3 : found  -  length 3
+        Check 4 : found  -  length 4
+        Check 5 : not found  -  stop  -  sequence [1 2 3 4]  longest = 4
     section Start from 3
-        Check 4 : found then 5 not found — sequence [3 4]  length 2
+        Check 4 : found then 5 not found  -  sequence [3 4]  length 2
     section Start from 2
-        Check 3 : found  check 4 found  then 5 not found — sequence [2 3 4]  length 3
+        Check 3 : found  check 4 found  then 5 not found  -  sequence [2 3 4]  length 3
 ```
 
 > 💡 **The critical constraint:** The problem explicitly requires **O(n) time**. This immediately rules out sorting (O(n log n)). This is the signal that you need a hash-based approach.
@@ -123,17 +123,17 @@ Solution 3 — Hash Map (Efficient)
 flowchart LR
   PROB(["Longest Consecutive Sequence"]) --> BFS & SS & HMS
 
-  subgraph BF ["Solution 1 — Brute Force"]
+  subgraph BF ["Solution 1  -  Brute Force"]
       direction TB
-      BFS["For each num scan array\nfor every next consecutive"] --> BF2["O(n) outer × O(n) chain\n× O(n) scan per lookup"] --> BFR["O(n^3) time  O(1) space\nCATASTROPHIC — TIMES OUT"]
+      BFS["For each num scan array\nfor every next consecutive"] --> BF2["O(n) outer x O(n) chain\nx O(n) scan per lookup"] --> BFR["O(n^3) time  O(1) space\nCATASTROPHIC  -  TIMES OUT"]
   end
 
-  subgraph SORT ["Solution 2 — Sorting"]
+  subgraph SORT ["Solution 2  -  Sorting"]
       direction TB
       SS["Sort first  then\nsingle pass to count runs"] --> ST2["Sorting: O(n log n)\nPass: O(n)"] --> STR["O(n log n) time  O(1) space\nVIOLATES O(n) CONSTRAINT"]
   end
 
-  subgraph HM ["Solution 3 — Hash Map"]
+  subgraph HM ["Solution 3  -  Hash Map"]
       direction TB
       HMS["Hash map O(1) lookups\nVisited flag blocks recount"] --> HM2["Build map: O(n)\nAll expansions: O(n) total"] --> HMR["O(n) time  O(n) space\nSATISFIES CONSTRAINT"]
   end
@@ -226,10 +226,10 @@ That question leads directly to the sorting and hash map approaches.
 
 ```mermaid
 flowchart TD
-    START(["For each num in nums — O(n) outer loop"]) --> WHILE["For each num: extend chain while num+1 exists — O(n) inner loop"]
-    WHILE --> SCAN["For each step: scan ENTIRE array to find num+1 — O(n) per lookup"]
-    SCAN --> TOTAL["O(n) outer × O(n) inner × O(n) scan = O(n^3) total"]
-    TOTAL --> FAIL["n = 100,000 means 10^15 operations — will always time out"]
+    START(["For each num in nums  -  O(n) outer loop"]) --> WHILE["For each num: extend chain while num+1 exists  -  O(n) inner loop"]
+    WHILE --> SCAN["For each step: scan ENTIRE array to find num+1  -  O(n) per lookup"]
+    SCAN --> TOTAL["O(n) outer x O(n) inner x O(n) scan = O(n^3) total"]
+    TOTAL --> FAIL["n = 100,000 means 10^15 operations  -  will always time out"]
     SCAN -->|"bottleneck identified"| FIX["FIX: replace the O(n) scan\nwith an O(1) hash map lookup"]
 
 ```
@@ -301,16 +301,16 @@ requires O(n), so sorting disqualifies this approach.
 stateDiagram-v2
     direction LR
     [*] --> Unsorted
-    Unsorted --> Sorted : nums.sort() — O(n log n)
+    Unsorted --> Sorted : nums.sort()  -  O(n log n)
 
     state Scanning {
         [*] --> ReadNext
         ReadNext --> Duplicate : nums[i] equals nums[i-1]
         ReadNext --> Consecutive : nums[i] equals nums[i-1] plus 1
         ReadNext --> Gap : nums[i] more than nums[i-1] plus 1
-        Duplicate --> ReadNext : skip — no length change
-        Consecutive --> ReadNext : extend — current_length plus 1
-        Gap --> ReadNext : reset — current_length equals 1
+        Duplicate --> ReadNext : skip  -  no length change
+        Consecutive --> ReadNext : extend  -  current_length plus 1
+        Gap --> ReadNext : reset  -  current_length equals 1
     }
 
     Sorted --> Scanning
@@ -358,20 +358,20 @@ Idea 2: Mark numbers as visited to prevent re-counting.
 
 ```mermaid
 flowchart TD
-    START(["nums = [5, 8, 1, 6, 3, 2]"]) --> BUILD["Step 1 — Build hashmap\nAll values set to False (unvisited)\n{ 5:F  8:F  1:F  6:F  3:F  2:F }"]
-    BUILD --> LOOP["Step 2 — For each num in nums"]
+    START(["nums = [5, 8, 1, 6, 3, 2]"]) --> BUILD["Step 1  -  Build hashmap\nAll values set to False (unvisited)\n{ 5:F  8:F  1:F  6:F  3:F  2:F }"]
+    BUILD --> LOOP["Step 2  -  For each num in nums"]
     LOOP --> INIT["current_length = 1"]
     INIT --> FWD["Expand FORWARD\ncheck num+1  num+2  ..."]
     FWD --> FCHK{"next_num in map\nAND not visited?"}
     FCHK -->|"Yes"| FVIS["mark visited = True\nlength += 1  next_num += 1"]
     FVIS --> FWD
-    FCHK -->|"No — stop forward"| BWD["Expand BACKWARD\ncheck num-1  num-2  ..."]
+    FCHK -->|"No  -  stop forward"| BWD["Expand BACKWARD\ncheck num-1  num-2  ..."]
     BWD --> BCHK{"prev_num in map\nAND not visited?"}
     BCHK -->|"Yes"| BVIS["mark visited = True\nlength += 1  prev_num -= 1"]
     BVIS --> BWD
-    BCHK -->|"No — stop backward"| MAXUP["longest = max(longest, current_length)"]
+    BCHK -->|"No  -  stop backward"| MAXUP["longest = max(longest, current_length)"]
     MAXUP --> MORE{"More nums\nto process?"}
-    MORE -->|"Yes — next num"| LOOP
+    MORE -->|"Yes  -  next num"| LOOP
     MORE -->|"No"| DONE(["Return longest"])
 
 ```
@@ -432,47 +432,47 @@ sequenceDiagram
     participant A as Algorithm
     participant MAX as Max Tracker
 
-    Note over A: Step 1 — build hashmap  all values False (unvisited)
+    Note over A: Step 1  -  build hashmap  all values False (unvisited)
     A->>HM: set {5:F, 8:F, 1:F, 6:F, 3:F, 2:F}
 
     Note over A: Process num = 5
     A->>HM: is 6 unvisited?
-    HM-->>A: yes — mark 6 visited  length = 2
+    HM-->>A: yes  -  mark 6 visited  length = 2
     A->>HM: is 7 in map?
-    HM-->>A: no — stop forward expansion
+    HM-->>A: no  -  stop forward expansion
     A->>HM: is 4 in map?
-    HM-->>A: no — stop backward expansion
+    HM-->>A: no  -  stop backward expansion
     A->>MAX: sequence [5, 6]  length = 2
     MAX-->>A: longest = 2
 
     Note over A: Process num = 8
     A->>HM: is 9 in map?
-    HM-->>A: no — stop forward
+    HM-->>A: no  -  stop forward
     A->>HM: is 7 in map?
-    HM-->>A: no — stop backward
+    HM-->>A: no  -  stop backward
     A->>MAX: sequence [8]  length = 1
     MAX-->>A: longest stays 2
 
     Note over A: Process num = 1
     A->>HM: is 2 unvisited?
-    HM-->>A: yes — mark 2 visited  length = 2
+    HM-->>A: yes  -  mark 2 visited  length = 2
     A->>HM: is 3 unvisited?
-    HM-->>A: yes — mark 3 visited  length = 3
+    HM-->>A: yes  -  mark 3 visited  length = 3
     A->>HM: is 4 in map?
-    HM-->>A: no — stop forward
+    HM-->>A: no  -  stop forward
     A->>HM: is 0 in map?
-    HM-->>A: no — stop backward
+    HM-->>A: no  -  stop backward
     A->>MAX: sequence [1, 2, 3]  length = 3
     MAX-->>A: longest = 3
 
-    Note over A: Process num = 6 — already visited
+    Note over A: Process num = 6  -  already visited
     A->>HM: is 6 already visited?
-    HM-->>A: yes — skip all expansion entirely
+    HM-->>A: yes  -  skip all expansion entirely
     A->>MAX: length = 1  longest stays 3
 
-    Note over A: num = 3 and num = 2 — both already visited — skip instantly
+    Note over A: num = 3 and num = 2  -  both already visited  -  skip instantly
 
-    Note over A,MAX: All nums processed — Return longest = 3
+    Note over A,MAX: All nums processed  -  Return longest = 3
 ```
 
 ### The Code
@@ -542,16 +542,16 @@ Space Complexity: O(n)
 
 ```mermaid
 quadrantChart
-    title Complexity Comparison — All Three Solutions
+    title Complexity Comparison  -  All Three Solutions
     x-axis Fast Time --> Slow Time
     y-axis Low Space --> High Space
-    quadrant-1 Slow and memory heavy — worst
+    quadrant-1 Slow and memory heavy  -  worst
     quadrant-2 Fast but uses extra memory
-    quadrant-3 Ideal — fast and lean
+    quadrant-3 Ideal  -  fast and lean
     quadrant-4 Slow but memory lean
-    Hash Map O(n) time O(n) space: [0.1, 0.65]
-    Sorting O(n log n) time O(1) space: [0.45, 0.1]
-    Brute Force O(n^3) time O(1) space: [0.95, 0.1]
+    Hash Map: [0.1, 0.65]
+    Sorting: [0.45, 0.1]
+    Brute Force: [0.95, 0.1]
 ```
 
 ---
@@ -580,9 +580,7 @@ and what data structure eliminates it?"
 
 ```mermaid
 mindmap
-    root((LeetCode 128
-Longest Consecutive
-Sequence))
+    root((LeetCode 128 Longest Consecutive Sequence))
         Problem Core
             Unsorted array of integers
             Find longest chain by plus 1

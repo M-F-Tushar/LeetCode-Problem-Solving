@@ -64,7 +64,7 @@ mindmap
 flowchart LR
     START(["Two Sum Problem"]) --> U["Understand\nReturn indices, not values\nCannot reuse same element"]
     U --> I["Key Insight\nFor num x, need target - x"]
-    I --> B["Baseline\nTry every pair\nO(n²)"]
+    I --> B["Baseline\nTry every pair\nO(n2)"]
     B --> M["Improve Search\nSort + two pointers\nO(n log n)"]
     M --> O["Optimal\nHash map seen values\nO(n)"]
     O --> DONE(["Return the two original indices"])
@@ -105,17 +105,17 @@ timeline
     Solution 1 Brute Force
         : Try every pair of numbers
         : Simple nested loops
-        : O(n²) — too slow for large input
+        : O(n2)  -  too slow for large input
 
     Solution 2 Two Pointers
         : Sort the array first
         : Shrink search space with two pointers
-        : O(n log n) — better but adds complexity
+        : O(n log n)  -  better but adds complexity
 
     Solution 3 Hash Map
         : Store seen values in a map
         : Look up complement instantly
-        : O(n) — optimal standard solution
+        : O(n)  -  optimal standard solution
 ```
 
 ---
@@ -308,7 +308,7 @@ class Solution:
 
 ```mermaid
 flowchart TD
-    A["Two Pointers works ✅\nO(n log n) is better than O(n²)"] --> B["But we introduced sorting\nwhich is not free"]
+    A["Two Pointers works ✅\nO(n log n) is better than O(n2)"] --> B["But we introduced sorting\nwhich is not free"]
     B --> C["And we already use O(n) extra memory\nto preserve original indices"]
     C --> D["Key question:\nWe're using O(n) memory anyway.\nCan we use it more cleverly\nto get O(n) time as well?"]
     D --> E["New idea: use a hash map\nStore seen values → look up complement instantly\nNo sort needed at all"]
@@ -414,9 +414,9 @@ quadrantChart
     quadrant-2 Fast and simple
     quadrant-3 Slow baseline
     quadrant-4 Strategic but still limited
-    Brute Force O(n²), O(1): [0.15, 0.20]
-    Sort + Two Pointers O(n log n), O(n): [0.55, 0.62]
-    One-Pass Hash Map O(n), O(n): [0.90, 0.95]
+    Brute Force: [0.15, 0.20]
+    Sort + Two Pointers: [0.55, 0.62]
+    One-Pass Hash Map: [0.90, 0.95]
 ```
 
 ---

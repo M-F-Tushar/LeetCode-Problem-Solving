@@ -23,12 +23,12 @@ s and t consist only of lowercase English letters
 ```mermaid
 flowchart TD
     INPUT(["Input: strings s and t"]) --> EMPTY{"Is s empty?"}
-    EMPTY -->|"Yes — vacuously true"| AUTO(["Return TRUE"])
-    EMPTY -->|"No — must verify conditions"| Q1{"Does every character of s exist somewhere in t?"}
-    Q1 -->|"No"| FAILC(["Return FALSE — missing character"])
+    EMPTY -->|"Yes  -  vacuously true"| AUTO(["Return TRUE"])
+    EMPTY -->|"No  -  must verify conditions"| Q1{"Does every character of s exist somewhere in t?"}
+    Q1 -->|"No"| FAILC(["Return FALSE  -  missing character"])
     Q1 -->|"Yes"| Q2{"Do all matched characters appear in the same left-to-right order in t?"}
-    Q2 -->|"No"| FAILO(["Return FALSE — order violated"])
-    Q2 -->|"Yes"| PASS(["Return TRUE — s is a valid subsequence of t"])
+    Q2 -->|"No"| FAILO(["Return FALSE  -  order violated"])
+    Q2 -->|"Yes"| PASS(["Return TRUE  -  s is a valid subsequence of t"])
 
 ```
 
@@ -135,14 +135,14 @@ Solution 2 — Two Pointers (Efficient)
 flowchart LR
     PROB(["Is s a subsequence of t?"]) --> B1 & T1
 
-    subgraph BF ["Solution 1 — Brute Force"]
+    subgraph BF ["Solution 1  -  Brute Force"]
         direction TB
-        B1["Generate ALL subsequences of t"] --> B2["2^N total combinations"] --> B3["Check if s is in the set"] --> BF_R["O(2^N) time and space\nEXPONENTIAL — UNUSABLE"]
+        B1["Generate ALL subsequences of t"] --> B2["2^N total combinations"] --> B3["Check if s is in the set"] --> BF_R["O(2^N) time and space\nEXPONENTIAL  -  UNUSABLE"]
     end
 
-    subgraph TP ["Solution 2 — Two Pointers"]
+    subgraph TP ["Solution 2  -  Two Pointers"]
         direction TB
-        T1["One pointer on s, one on t"] --> T2["Scan t and match s greedily"] --> T3["Return when ptr1 reaches end of s"] --> TP_R["O(N) time, O(1) space\nLINEAR — OPTIMAL"]
+        T1["One pointer on s, one on t"] --> T2["Scan t and match s greedily"] --> T3["Return when ptr1 reaches end of s"] --> TP_R["O(N) time, O(1) space\nLINEAR  -  OPTIMAL"]
     end
 
 ```
@@ -189,7 +189,7 @@ You can see the problem immediately: with just 6 characters you already have doz
 
 ```mermaid
 flowchart TD
-    ROOT(["t = ahbgdc — Build Every Subsequence"]) --> IA & XA
+    ROOT(["t = ahbgdc  -  Build Every Subsequence"]) --> IA & XA
 
     IA["include 'a'"] --> IAH["include 'h'\nresult: ah"] & IXH["skip 'h'\nresult: a"]
     XA["skip 'a'"] --> XAH["include 'h'\nresult: h"] & XXH["skip 'h'\nresult: empty"]
@@ -321,32 +321,32 @@ sequenceDiagram
     Note over S,T: Both pointers start at index 0
 
     S->>T: s[0] = a  vs  t[0] = a ?
-    T-->>S: MATCH — advance both pointers
+    T-->>S: MATCH  -  advance both pointers
     Note over S: ptr1 = 1
     Note over T: ptr2 = 1
 
     S->>T: s[1] = b  vs  t[1] = h ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 2
 
     S->>T: s[1] = b  vs  t[2] = b ?
-    T-->>S: MATCH — advance both pointers
+    T-->>S: MATCH  -  advance both pointers
     Note over S: ptr1 = 2
     Note over T: ptr2 = 3
 
     S->>T: s[2] = c  vs  t[3] = g ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 4
 
     S->>T: s[2] = c  vs  t[4] = d ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 5
 
     S->>T: s[2] = c  vs  t[5] = c ?
-    T-->>S: MATCH — advance both pointers
+    T-->>S: MATCH  -  advance both pointers
     Note over S: ptr1 = 3  which equals len(s) = 3
 
-    Note over S,T: ptr1 = 3 = len(s) — Return TRUE
+    Note over S,T: ptr1 = 3 = len(s)  -  Return TRUE
 ```
 
 ### Dry Run — `s = "ach"`, `t = "ahbgdc"` (Order Violation)
@@ -378,34 +378,34 @@ sequenceDiagram
     Note over S,T: Both pointers start at index 0
 
     S->>T: s[0] = a  vs  t[0] = a ?
-    T-->>S: MATCH — advance both pointers
+    T-->>S: MATCH  -  advance both pointers
     Note over S: ptr1 = 1
     Note over T: ptr2 = 1
 
     S->>T: s[1] = c  vs  t[1] = h ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 2
 
     S->>T: s[1] = c  vs  t[2] = b ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 3
 
     S->>T: s[1] = c  vs  t[3] = g ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 4
 
     S->>T: s[1] = c  vs  t[4] = d ?
-    T-->>S: no match — advance ptr2 only
+    T-->>S: no match  -  advance ptr2 only
     Note over T: ptr2 = 5
 
     S->>T: s[1] = c  vs  t[5] = c ?
-    T-->>S: MATCH — advance both pointers
+    T-->>S: MATCH  -  advance both pointers
     Note over S: ptr1 = 2
     Note over T: ptr2 = 6  which equals len(t) = 6
 
-    Note over S,T: Loop ends — ptr2 reached end of t
-    Note over S,T: ptr1 = 2 but len(s) = 3 — Return FALSE
-    Note over S: h was never found — order violation caught naturally
+    Note over S,T: Loop ends  -  ptr2 reached end of t
+    Note over S,T: ptr1 = 2 but len(s) = 3  -  Return FALSE
+    Note over S: h was never found  -  order violation caught naturally
 ```
 
 ### The Code
@@ -453,15 +453,15 @@ Space Complexity: O(1)
 
 ```mermaid
 quadrantChart
-    title Time vs Space Complexity — Brute Force vs Two Pointers
+    title Time vs Space Complexity  -  Brute Force vs Two Pointers
     x-axis Efficient Time --> Slow Time
     y-axis Efficient Space --> Wasteful Space
-    quadrant-1 Slow and memory heavy — Avoid
+    quadrant-1 Slow and memory heavy  -  Avoid
     quadrant-2 Memory heavy but fast
-    quadrant-3 Ideal — fast and lean
+    quadrant-3 Ideal  -  fast and lean
     quadrant-4 Slow but memory lean
-    Two Pointers O(N) time O(1) space: [0.05, 0.05]
-    Brute Force O(2^N) time O(2^N) space: [0.95, 0.95]
+    Two Pointers: [0.05, 0.05]
+    Brute Force: [0.95, 0.95]
 ```
 
 ---
@@ -506,8 +506,7 @@ The shift happens when you ask:
 
 ```mermaid
 mindmap
-    root((LeetCode 392
-Is Subsequence))
+    root((LeetCode 392 Is Subsequence))
         Problem Definition
             s is a subsequence of t
             All chars of s must exist in t

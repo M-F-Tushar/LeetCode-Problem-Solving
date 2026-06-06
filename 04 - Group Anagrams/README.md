@@ -67,8 +67,8 @@ mindmap
 flowchart LR
     START(["Group Anagrams"]) --> U["Understand\nGroup strings, not just compare two\nEach group shares a signature"]
     U --> S["Signature Idea\nTransform every anagram\ninto the same canonical key"]
-    S --> B["Baseline Signature\nSort each string\nO(n × k log k)"]
-    B --> F["Optimal Signature\n26-count frequency tuple\nO(n × k)"]
+    S --> B["Baseline Signature\nSort each string\nO(n x k log k)"]
+    B --> F["Optimal Signature\n26-count frequency tuple\nO(n x k)"]
     F --> M["Hash Map Grouping\nsignature -> list of words"]
     M --> DONE(["Return all grouped values"])
 ```
@@ -111,7 +111,7 @@ flowchart TD
     A["🧩 Input: Array of Strings"] --> B["🪓 Baseline Idea\nCompare all pairs"]
 
     B --> C{"⚠️ Bottleneck?"}
-    C -->|"Yes"| D["O(n²) comparisons.\nInstant Timeout Failure."]
+    C -->|"Yes"| D["O(n2) comparisons.\nInstant Timeout Failure."]
 
     D --> E["🔁 Pivot 1: Sorted Signature\nSort each string. Use sorted string as Hash Key."]
 
@@ -135,12 +135,12 @@ timeline
     Solution 1 Sorting
         : Sort each string to create its signature
         : Anagrams produce identical sorted strings
-        : O(n * k log k) — simple and correct
+        : O(n * k log k)  -  simple and correct
 
     Solution 2 Frequency Tuple
         : 26 fixed counters for a-z per string
         : Convert count array to immutable tuple as key
-        : O(n * k) time — eliminates sorting overhead entirely
+        : O(n * k) time  -  eliminates sorting overhead entirely
 ```
 
 ---
@@ -253,7 +253,7 @@ class Solution:
 flowchart TD
     A["Sorting works ✅\nClean, readable, easy"] --> B["But sorting does more work than needed\nWe don't care about ORDER\nWe only care about COUNTS"]
     B --> C["Key question:\nCan I generate a signature from\ncharacter frequencies without sorting?"]
-    C --> D["New idea: count each character\nFor lowercase a-z, there are exactly 26 possibilities\nUse a fixed array of 26 slots\nConvert to a tuple as the hash key\nO(n * k) time — no log k overhead"]
+    C --> D["New idea: count each character\nFor lowercase a-z, there are exactly 26 possibilities\nUse a fixed array of 26 slots\nConvert to a tuple as the hash key\nO(n * k) time  -  no log k overhead"]
 
 ```
 
@@ -325,7 +325,7 @@ sequenceDiagram
     S->>C: "tea" → t=1, e=1, a=1
     C-->>MAP: tuple → (1,0,0,0,1,0,...,1,...) → ["eat", "tea"]
 
-    Note over C,MAP: Same tuple key — same frequencies!
+    Note over C,MAP: Same tuple key  -  same frequencies!
 
     S->>C: "ate" → a=1, t=1, e=1
     C-->>MAP: tuple → (1,0,0,0,1,0,...,1,...) → ["eat", "tea", "ate"]
@@ -382,8 +382,8 @@ quadrantChart
     quadrant-2 Fast simple grouping
     quadrant-3 Slow but easy baseline
     quadrant-4 Complex without enough payoff
-    Sorted String Signature O(n × k log k): [0.25, 0.45]
-    Frequency Tuple Signature O(n × k): [0.82, 0.92]
+    Sorted String Signature: [0.25, 0.45]
+    Frequency Tuple Signature: [0.82, 0.92]
 ```
 
 ---

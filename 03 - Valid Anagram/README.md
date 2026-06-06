@@ -113,17 +113,17 @@ timeline
     Solution 1 Sorting
         : Sort both strings
         : Anagrams produce identical sorted strings
-        : O(n log n) — simple and correct
+        : O(n log n)  -  simple and correct
 
     Solution 2 Bucket Array
         : 26 fixed counters for a-z
         : Increment for s, decrement for t
-        : O(n) time, O(1) space — optimal for lowercase
+        : O(n) time, O(1) space  -  optimal for lowercase
 
     Solution 3 Hash Map
         : Dynamic frequency table
         : Works for any character set
-        : O(n) time, O(k) space — Unicode-safe
+        : O(n) time, O(k) space  -  Unicode-safe
 ```
 
 ---
@@ -333,7 +333,7 @@ flowchart TD
     A["Bucket Array is optimal for lowercase a-z ✅\nO(n) time, O(1) space"] --> B["But it is CONSTRAINT-SPECIFIC\nOnly works for exactly 26 lowercase English letters"]
     B --> C["What if input has:\nUppercase letters?\nSpaces or punctuation?\nAccented letters (é, ü)?\nUnicode / emojis?"]
     C --> D["The fixed-array index would break or be incorrect"]
-    D --> E["New idea: dynamic hash map\nLet the map grow to fit any character\nSame logic: increment s, decrement t\nCheck all zeros at the end\nO(n) time, O(k) space — works for everything"]
+    D --> E["New idea: dynamic hash map\nLet the map grow to fit any character\nSame logic: increment s, decrement t\nCheck all zeros at the end\nO(n) time, O(k) space  -  works for everything"]
 
 ```
 
@@ -452,10 +452,10 @@ quadrantChart
     quadrant-2 Fast but constraint-specific
     quadrant-3 Slow and limited
     quadrant-4 Flexible but slower
-    Sorting O(n log n), general: [0.80, 0.42]
-    26-Bucket Array O(n), O(1): [0.18, 0.96]
-    Hash Map O(n), Unicode-safe: [0.88, 0.90]
-    Counter One-Liner O(n), readable: [0.94, 0.84]
+    Sorting general: [0.80, 0.42]
+    26-Bucket Array: [0.18, 0.96]
+    Hash Map Unicode-safe: [0.88, 0.90]
+    Counter One-Liner readable: [0.94, 0.84]
 ```
 
 ---

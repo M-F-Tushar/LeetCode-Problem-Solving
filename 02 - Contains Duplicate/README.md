@@ -48,7 +48,7 @@ mindmap
 flowchart LR
     START(["Contains Duplicate"]) --> U["Understand\nReturn true on ANY repeat\nReturn false only if all unique"]
     U --> Q["Core Question\nHave I seen this value before?"]
-    Q --> B["Baseline\nCompare every pair\nO(n²)"]
+    Q --> B["Baseline\nCompare every pair\nO(n2)"]
     B --> S["Middle Step\nSort so duplicates become neighbors\nO(n log n)"]
     S --> O["Optimal\nHash set membership check\nO(n)"]
     O --> DONE(["Return as soon as duplicate appears"])
@@ -84,18 +84,18 @@ timeline
 
     Solution 1 Brute Force
         : Compare every element with every other
-        : O(n²) time, O(1) space
+        : O(n2) time, O(1) space
         : Too slow for large arrays
 
     Solution 2 Sorting
         : Sort so duplicates become neighbors
         : Only compare adjacent elements
-        : O(n log n) — better, but still not linear
+        : O(n log n)  -  better, but still not linear
 
     Solution 3 Hash Set
         : Track seen values as we scan
         : Check membership instantly
-        : O(n) time — optimal
+        : O(n) time  -  optimal
 ```
 
 ---
@@ -129,7 +129,7 @@ flowchart LR
     N3 --> Found["nums[0] == nums[3] == 1\nDuplicate found! Return True ✅"]
 
     subgraph Issue["The problem"]
-        P["For arrays with no duplicates,\nevery pair must be checked → O(n²)"]
+        P["For arrays with no duplicates,\nevery pair must be checked → O(n2)"]
     end
 
 ```
@@ -262,7 +262,7 @@ class Solution:
 
 ```mermaid
 flowchart TD
-    A["Sorting works ✅\nO(n log n) is much better than O(n²)"] --> B["But sorting modifies the original array\nThat may not always be acceptable"]
+    A["Sorting works ✅\nO(n log n) is much better than O(n2)"] --> B["But sorting modifies the original array\nThat may not always be acceptable"]
     B --> C["And we still do O(n log n) work\neven though the answer might be on the second element"]
     C --> D["Key insight:\nWe don't need sorted order\nWe just need to remember what we've seen\nand check instantly as we scan"]
     D --> E["New idea: HashSet\nFor each element, ask 'seen before?'\nIf yes → duplicate\nIf no → remember it\nOne pass, O(n)"]
@@ -383,9 +383,9 @@ quadrantChart
     quadrant-2 Fast and lean
     quadrant-3 Slow baseline
     quadrant-4 Slow with memory
-    Brute Force O(n²), O(1): [0.10, 0.18]
-    Sorting O(n log n), O(1): [0.20, 0.60]
-    Hash Set O(n), O(n): [0.88, 0.94]
+    Brute Force: [0.10, 0.18]
+    Sorting: [0.20, 0.60]
+    Hash Set: [0.88, 0.94]
 ```
 
 ---

@@ -138,13 +138,13 @@ timeline
     Solution 1 Hash Map and Sorting
         : Count frequencies with a Hash Map
         : Sort keys by frequency descending
-        : O(n log n) — violates the problem constraint
+        : O(n log n)  -  violates the problem constraint
 
     Solution 2 Bucket Sort
         : Count frequencies with a Hash Map
         : Place each number into bucket at index = its frequency
         : Read buckets right-to-left to collect top k
-        : O(n) — strictly linear, satisfies the constraint
+        : O(n)  -  strictly linear, satisfies the constraint
 ```
 
 ---
@@ -400,8 +400,8 @@ quadrantChart
     quadrant-2 Fast and simple
     quadrant-3 Violates hidden constraint
     quadrant-4 Structural but not fast enough
-    Hash Map + Sorting O(n log n): [0.25, 0.42]
-    Index-as-Frequency Bucket Sort O(n): [0.88, 0.94]
+    Hash Map + Sorting: [0.25, 0.42]
+    Index-as-Frequency Bucket Sort: [0.88, 0.94]
 ```
 
 ---
