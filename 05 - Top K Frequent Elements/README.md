@@ -63,10 +63,12 @@ mindmap
 
 ```mermaid
 flowchart LR
-    A["Phase 1\nUnderstand the Problem\nWhat does 'top k frequent' mean?\nWhat is the hidden time constraint?\nWhat bounds our frequency values?"] --> B["Phase 2\nBuild the Solution\nHash Map + Sort baseline\nThen Bucket Sort optimization"]
-
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+    START(["Top K Frequent Elements"]) --> U["Understand\nReturn k most frequent values\nOrder does not matter"]
+    U --> H["Hidden Constraint\nMust beat O(n log n)\nComparison sorting is suspicious"]
+    H --> C["Count Frequencies\nHash map value -> count\nO(n)"]
+    C --> B["Key Insight\nFrequency is bounded by n\nUse frequency as an index"]
+    B --> O["Optimal\nBucket array by frequency\nScan from high to low"]
+    O --> DONE(["Collect until result length equals k"])
 ```
 
 ---
@@ -122,15 +124,7 @@ flowchart TD
 
     F --> G["🚀 Optimal Result\nScan array backwards.\nTime: O(n) | Space: O(n)"]
 
-    classDef problem fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
-    classDef danger fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
-    classDef insight fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
-    classDef optimize fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a;
 
-    class A problem;
-    class B,C,D danger;
-    class E,F insight;
-    class G optimize;
 ```
 
 ---
@@ -188,7 +182,6 @@ flowchart TD
     E --> F["Return first k elements"]
     F --> G["[1, 2] ✅"]
 
-    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -251,9 +244,6 @@ flowchart TD
     B --> C["Key question:\nDo I actually need to sort?\nWhat do I know about frequencies?"]
     C --> D["Frequencies are BOUNDED between 1 and N\nThis means I can use frequency as an array INDEX\nNo comparison sorting needed at all\nBucket Sort → O(n) time"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -295,7 +285,6 @@ flowchart TD
     H --> I["Step 4: Iterate bucket in reverse, collect until len(result) == k"]
     I --> J["i=6:[] → i=5:[] → i=4:[] → i=3:[1] → result=[1]\ni=2:[2] → result=[1,2] → len=k=2 → Return ✅"]
 
-    style J fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -320,9 +309,6 @@ flowchart LR
 
     I6 --> I5 --> I4 --> I3 --> I2 --> I1
 
-    style I3 fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
-    style I2 fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
-    style R fill:#fef3c7,stroke:#d97706,color:#000000
 ```
 
 ---
@@ -406,23 +392,16 @@ class Solution:
 ## Full Comparison of Both Solutions
 
 ```mermaid
-flowchart TB
-    subgraph S1["Solution 1: Hash Map + Sorting"]
-        S1A["Count with Hash Map\nSort keys by frequency descending\nSlice top k"]
-        S1B["O(n log n) time, O(n) space"]
-        S1C["❌ Violates the explicit O(n log n) constraint"]
-    end
-
-    subgraph S2["Solution 2: Bucket Sort"]
-        S2A["Count with frequencyMap\nPlace numbers into frequency-indexed buckets\nIterate bucket in reverse"]
-        S2B["O(n) time, O(n) space"]
-        S2C["✅ Optimal — strictly linear, satisfies the constraint"]
-    end
-
-    S1 --> S2
-
-    style S1C fill:#fee2e2,stroke:#dc2626,color:#000000
-    style S2C fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+quadrantChart
+    title Top K Frequent Elements Approach Trade-Off Map
+    x-axis Simpler Method --> Uses Frequency Structure
+    y-axis Slower Runtime --> Faster Runtime
+    quadrant-1 Fast and constraint-aware
+    quadrant-2 Fast and simple
+    quadrant-3 Violates hidden constraint
+    quadrant-4 Structural but not fast enough
+    Hash Map + Sorting O(n log n): [0.25, 0.42]
+    Index-as-Frequency Bucket Sort O(n): [0.88, 0.94]
 ```
 
 ---

@@ -46,10 +46,12 @@ mindmap
 
 ```mermaid
 flowchart LR
-    A["Phase 1\nUnderstand the Problem\nWhat does duplicate mean?\nWhat edge cases exist?"] --> B["Phase 2\nBuild the Solution\nNaive first\nRemove bottlenecks step by step"]
-
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+    START(["Contains Duplicate"]) --> U["Understand\nReturn true on ANY repeat\nReturn false only if all unique"]
+    U --> Q["Core Question\nHave I seen this value before?"]
+    Q --> B["Baseline\nCompare every pair\nO(n²)"]
+    B --> S["Middle Step\nSort so duplicates become neighbors\nO(n log n)"]
+    S --> O["Optimal\nHash set membership check\nO(n)"]
+    O --> DONE(["Return as soon as duplicate appears"])
 ```
 
 ---
@@ -70,8 +72,6 @@ flowchart TD
     D --> A
     A --> E["Finished list? Return False"]
 
-    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
-    style E fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -132,8 +132,6 @@ flowchart LR
         P["For arrays with no duplicates,\nevery pair must be checked → O(n²)"]
     end
 
-    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
-    style Issue fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -175,9 +173,6 @@ flowchart TD
     B --> C["Key observation:\nDuplicates must have the same VALUE\nIf we SORT the array,\nduplicates will be NEXT TO EACH OTHER"]
     C --> D["New idea: sort first\nThen only check adjacent pairs\nNo inner scan needed"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -207,7 +202,6 @@ flowchart TD
     C --> D["Compare adjacent pairs:\nnums[0] vs nums[1] → 1 == 1 ✅"]
     D --> E["Return True"]
 
-    style E fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -273,9 +267,6 @@ flowchart TD
     C --> D["Key insight:\nWe don't need sorted order\nWe just need to remember what we've seen\nand check instantly as we scan"]
     D --> E["New idea: HashSet\nFor each element, ask 'seen before?'\nIf yes → duplicate\nIf no → remember it\nOne pass, O(n)"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -326,7 +317,6 @@ flowchart LR
     Check -- Yes --> Found["Duplicate → True ✅"]
     Check -- No  --> Store["Store 1 in bucket\nContinue"]
 
-    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 A Python `set` resolves membership in **O(1) average time** regardless of how many items are in it.
@@ -378,7 +368,6 @@ flowchart LR
     A["nums = [1,2,3,1]\nlen = 4"] --> B["set(nums) = {1,2,3}\nlen = 3"]
     B --> C["4 != 3 → True\nA duplicate was removed by the set"]
 
-    style C fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -386,30 +375,17 @@ flowchart LR
 ## Full Comparison
 
 ```mermaid
-flowchart TB
-    subgraph BF["Solution 1: Brute Force"]
-        BF1["Nested loop — compare all pairs"]
-        BF2["O(n²) time, O(1) space"]
-        BF3["❌ Slow for large input"]
-    end
-
-    subgraph SO["Solution 2: Sorting"]
-        SO1["Sort → check neighbors"]
-        SO2["O(n log n) time, O(1) space"]
-        SO3["⚠️ Better, but modifies input\nand can't early-exit from sort"]
-    end
-
-    subgraph HS["Solution 3: Hash Set"]
-        HS1["One pass, track seen values"]
-        HS2["O(n) time, O(n) space"]
-        HS3["✅ Optimal — this is the answer"]
-    end
-
-    BF --> SO --> HS
-
-    style BF3 fill:#fee2e2,stroke:#dc2626,color:#000000
-    style SO3 fill:#fef3c7,stroke:#d97706,color:#000000
-    style HS3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+quadrantChart
+    title Contains Duplicate Approach Trade-Off Map
+    x-axis Low Extra Memory --> Uses Extra Memory
+    y-axis Slower Runtime --> Faster Runtime
+    quadrant-1 Fast with memory
+    quadrant-2 Fast and lean
+    quadrant-3 Slow baseline
+    quadrant-4 Slow with memory
+    Brute Force O(n²), O(1): [0.10, 0.18]
+    Sorting O(n log n), O(1): [0.20, 0.60]
+    Hash Set O(n), O(n): [0.88, 0.94]
 ```
 
 ---

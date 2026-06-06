@@ -63,10 +63,12 @@ mindmap
 
 ```mermaid
 flowchart LR
-    A["Phase 1\nUnderstand the Problem\nWhat is an anagram?\nWhat edge cases exist?\nLength check first!"] --> B["Phase 2\nBuild the Solution\nSort-based baseline\nThen counting-based optimization"]
-
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+    START(["Valid Anagram"]) --> U["Understand\nSame chars + same frequencies\nOrder does not matter"]
+    U --> L["Free First Check\nDifferent lengths cannot match\nReturn false immediately"]
+    L --> S["Baseline\nSort both strings\nO(n log n)"]
+    S --> B["Lowercase Optimal\n26-slot bucket array\nO(n), O(1)"]
+    B --> H["Flexible Follow-up\nHash map / Counter\nUnicode-safe"]
+    H --> DONE(["Return whether frequency tables balance"])
 ```
 
 ---
@@ -96,8 +98,6 @@ flowchart LR
     A["len(s) != len(t)?"] -- Yes --> B["Return False immediately\nCan't be anagrams\nif lengths differ"]
     A -- No --> C["Proceed to frequency check"]
 
-    style B fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#000000
-    style C fill:#dcfce7,stroke:#16a34a,color:#000000
 ```
 
 This is a free O(1) optimization that eliminates many inputs immediately.
@@ -157,8 +157,6 @@ flowchart TD
     Cmp -- Yes --> True["Return True ✅"]
     Cmp -- No  --> False["Return False ❌"]
 
-    style True fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
-    style False fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -223,9 +221,6 @@ flowchart TD
     B --> C["Key question:\nCan I check character frequencies\nwithout sorting?"]
     C --> D["New idea: count each character\nFor lowercase a-z, there are exactly 26 possibilities\nUse a fixed array of 26 slots\nO(n) time, O(1) space"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -262,8 +257,6 @@ flowchart LR
         F["'g' → ord(103) - ord(97) = 6"]
     end
 
-    style I0 fill:#dbeafe,stroke:#2563eb,color:#000000
-    style I25 fill:#ede9fe,stroke:#7c3aed,color:#000000
 ```
 
 ---
@@ -281,8 +274,6 @@ flowchart TD
     F -- Yes --> G["Return True ✅\nEvery addition was balanced by a subtraction"]
     F -- No  --> H["Return False ❌\nSome character count doesn't match"]
 
-    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
-    style H fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -344,9 +335,6 @@ flowchart TD
     C --> D["The fixed-array index would break or be incorrect"]
     D --> E["New idea: dynamic hash map\nLet the map grow to fit any character\nSame logic: increment s, decrement t\nCheck all zeros at the end\nO(n) time, O(k) space — works for everything"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -381,8 +369,6 @@ flowchart TD
     F -- Yes --> G["Return True ✅"]
     F -- No  --> H["Return False ❌"]
 
-    style G fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
-    style H fill:#fee2e2,stroke:#dc2626,color:#000000
 ```
 
 ---
@@ -458,30 +444,18 @@ class Solution:
 ## Full Comparison of All Three Solutions
 
 ```mermaid
-flowchart TB
-    subgraph S1["Solution 1: Sorting"]
-        S1A["Sort both strings\nCompare sorted results"]
-        S1B["O(n log n) time, O(n) space"]
-        S1C["⚠️ Correct but does unnecessary work\nOrder doesn't matter for anagrams"]
-    end
-
-    subgraph S2["Solution 2: Bucket Array"]
-        S2A["26 fixed counters\n+1 for s, -1 for t"]
-        S2B["O(n) time, O(1) space"]
-        S2C["✅ Optimal for lowercase a-z constraint"]
-    end
-
-    subgraph S3["Solution 3: Hash Map"]
-        S3A["Dynamic dict\n+1 for s, -1 for t"]
-        S3B["O(n) time, O(k) space"]
-        S3C["✅ Optimal and flexible — works for any characters"]
-    end
-
-    S1 --> S2 --> S3
-
-    style S1C fill:#fef3c7,stroke:#d97706,color:#000000
-    style S2C fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
-    style S3C fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+quadrantChart
+    title Valid Anagram Approach Trade-Off Map
+    x-axis Lowercase Only --> Any Character Set
+    y-axis Slower Runtime --> Faster Runtime
+    quadrant-1 Fast and universal
+    quadrant-2 Fast but constraint-specific
+    quadrant-3 Slow and limited
+    quadrant-4 Flexible but slower
+    Sorting O(n log n), general: [0.80, 0.42]
+    26-Bucket Array O(n), O(1): [0.18, 0.96]
+    Hash Map O(n), Unicode-safe: [0.88, 0.90]
+    Counter One-Liner O(n), readable: [0.94, 0.84]
 ```
 
 ---

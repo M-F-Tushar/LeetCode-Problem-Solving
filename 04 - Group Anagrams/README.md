@@ -65,10 +65,12 @@ mindmap
 
 ```mermaid
 flowchart LR
-    A["Phase 1\nUnderstand the Problem\nWhat is an anagram?\nWhat edge cases exist?\nHow do we GROUP, not just compare?"] --> B["Phase 2\nBuild the Solution\nSort-based baseline\nThen frequency tuple optimization"]
-
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+    START(["Group Anagrams"]) --> U["Understand\nGroup strings, not just compare two\nEach group shares a signature"]
+    U --> S["Signature Idea\nTransform every anagram\ninto the same canonical key"]
+    S --> B["Baseline Signature\nSort each string\nO(n × k log k)"]
+    B --> F["Optimal Signature\n26-count frequency tuple\nO(n × k)"]
+    F --> M["Hash Map Grouping\nsignature -> list of words"]
+    M --> DONE(["Return all grouped values"])
 ```
 
 ---
@@ -119,15 +121,7 @@ flowchart TD
     G --> H["🧠 Pivot 2: Frequency Array Signature\nCount char frequency. Use count tuple as Hash Key."]
     H --> I["🚀 Optimal Result\nTime: O(n * k)"]
 
-    classDef problem fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a;
-    classDef danger fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#0f172a;
-    classDef insight fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a;
-    classDef optimize fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a;
 
-    class A problem;
-    class B,C,D danger;
-    class E,F,G insight;
-    class H,I optimize;
 ```
 
 ---
@@ -187,7 +181,6 @@ flowchart TD
     G --> I
     H --> I
 
-    style I fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -262,9 +255,6 @@ flowchart TD
     B --> C["Key question:\nCan I generate a signature from\ncharacter frequencies without sorting?"]
     C --> D["New idea: count each character\nFor lowercase a-z, there are exactly 26 possibilities\nUse a fixed array of 26 slots\nConvert to a tuple as the hash key\nO(n * k) time — no log k overhead"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style D fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -301,8 +291,6 @@ flowchart LR
         F["'e' → ord(101) - ord(97) = 4"]
     end
 
-    style I0 fill:#dbeafe,stroke:#2563eb,color:#000000
-    style I25 fill:#ede9fe,stroke:#7c3aed,color:#000000
 ```
 
 ---
@@ -318,8 +306,6 @@ flowchart TD
     E --> F["signature = tuple(count)\n= (1,0,0,0,1,0,...,1,0,0,0,0,0)"]
     F --> G["anagram_map[signature].append('eat')"]
 
-    style F fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
-    style G fill:#dcfce7,stroke:#16a34a,color:#000000
 ```
 
 ---
@@ -388,23 +374,16 @@ class Solution:
 ## Full Comparison of Both Solutions
 
 ```mermaid
-flowchart TB
-    subgraph S1["Solution 1: Sorting"]
-        S1A["Sort each string\nUse sorted string as key"]
-        S1B["O(n * k log k) time, O(n * k) space"]
-        S1C["⚠️ Correct but carries unnecessary log k sorting overhead"]
-    end
-
-    subgraph S2["Solution 2: Frequency Tuple"]
-        S2A["26 fixed counters per string\nConvert to tuple as key"]
-        S2B["O(n * k) time, O(n * k) space"]
-        S2C["✅ Optimal — eliminates sorting entirely"]
-    end
-
-    S1 --> S2
-
-    style S1C fill:#fef3c7,stroke:#d97706,color:#000000
-    style S2C fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+quadrantChart
+    title Group Anagrams Approach Trade-Off Map
+    x-axis Simpler Signature --> More Optimized Signature
+    y-axis Slower Runtime --> Faster Runtime
+    quadrant-1 Fast optimized grouping
+    quadrant-2 Fast simple grouping
+    quadrant-3 Slow but easy baseline
+    quadrant-4 Complex without enough payoff
+    Sorted String Signature O(n × k log k): [0.25, 0.45]
+    Frequency Tuple Signature O(n × k): [0.82, 0.92]
 ```
 
 ---

@@ -62,10 +62,12 @@ mindmap
 
 ```mermaid
 flowchart LR
-    A["Phase 1\nUnderstand the Problem\nWhat is asked?\nWhat are the constraints?"] --> B["Phase 2\nBuild the Solution\nStart simple\nOptimize from there"]
-
-    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#000000
-    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#000000
+    START(["Two Sum Problem"]) --> U["Understand\nReturn indices, not values\nCannot reuse same element"]
+    U --> I["Key Insight\nFor num x, need target - x"]
+    I --> B["Baseline\nTry every pair\nO(n²)"]
+    B --> M["Improve Search\nSort + two pointers\nO(n log n)"]
+    M --> O["Optimal\nHash map seen values\nO(n)"]
+    O --> DONE(["Return the two original indices"])
 ```
 
 We always start in **Phase 1** — reading slowly, restating the problem, identifying what the output looks like. Only then do we enter **Phase 2** — writing code, improving it, and proving why each step up is better.
@@ -90,8 +92,6 @@ flowchart TD
     C -- Yes --> D["Return both indices ✅"]
     C -- No  --> E["Remember that I saw 2\nMove to next number"]
 
-    style D fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
-    style E fill:#fef3c7,stroke:#d97706,color:#000000
 ```
 
 ---
@@ -153,7 +153,6 @@ flowchart LR
     Found["nums[0]+nums[1] = 2+7 = 9 ✅\nReturn [0, 1]"]
     N1 --> Found
 
-    style Found fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -196,9 +195,6 @@ flowchart TD
     C --> D["Key question:\nDo we need to scan everything?\nOr can we narrow the search space?"]
     D --> E["New idea: sort the array\nUse two pointers to shrink the search range"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -317,9 +313,6 @@ flowchart TD
     C --> D["Key question:\nWe're using O(n) memory anyway.\nCan we use it more cleverly\nto get O(n) time as well?"]
     D --> E["New idea: use a hash map\nStore seen values → look up complement instantly\nNo sort needed at all"]
 
-    style A fill:#dcfce7,stroke:#16a34a,color:#000000
-    style B fill:#fee2e2,stroke:#dc2626,color:#000000
-    style E fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#000000
 ```
 
 ---
@@ -352,7 +345,6 @@ flowchart TD
 
     A1 --> A2 --> A3 --> B1 --> B2 --> B3 --> B4
 
-    style B4 fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
 ```
 
 ---
@@ -414,30 +406,17 @@ class Solution:
 ## Why This Is the Final Answer
 
 ```mermaid
-flowchart TB
-    subgraph BF["Solution 1: Brute Force"]
-        BF1["Nested loops"]
-        BF2["O(n²) time, O(1) space"]
-        BF3["❌ Too slow for large n"]
-    end
-
-    subgraph TP["Solution 2: Two Pointers"]
-        TP1["Sort + shrink window"]
-        TP2["O(n log n) time, O(n) space"]
-        TP3["⚠️ Better, but sort is wasted work"]
-    end
-
-    subgraph HM["Solution 3: Hash Map"]
-        HM1["One-pass scan + instant lookup"]
-        HM2["O(n) time, O(n) space"]
-        HM3["✅ Optimal — this is the answer"]
-    end
-
-    BF --> TP --> HM
-
-    style BF3 fill:#fee2e2,stroke:#dc2626,color:#000000
-    style TP3 fill:#fef3c7,stroke:#d97706,color:#000000
-    style HM3 fill:#dcfce7,stroke:#16a34a,stroke-width:3px,color:#000000
+quadrantChart
+    title Two Sum Approach Trade-Off Map
+    x-axis Simpler Implementation --> More Strategic Data Structure
+    y-axis Slower Runtime --> Faster Runtime
+    quadrant-1 Fast and strategic
+    quadrant-2 Fast and simple
+    quadrant-3 Slow baseline
+    quadrant-4 Strategic but still limited
+    Brute Force O(n²), O(1): [0.15, 0.20]
+    Sort + Two Pointers O(n log n), O(n): [0.55, 0.62]
+    One-Pass Hash Map O(n), O(n): [0.90, 0.95]
 ```
 
 ---
