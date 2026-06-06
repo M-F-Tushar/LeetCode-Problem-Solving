@@ -586,23 +586,23 @@ mindmap
             Find longest chain by plus 1
             Must run in O of n time
             Sorting is explicitly disqualified
-        Brute Force O(n^3)
+        Brute Force - cubic O n3
             Try every number as start
             Scan full array for each next num
             Three nested levels of work
             Bottleneck is the innermost array scan
-        Sorting O(n log n)
+        Sorting - O n log n
             Sort brings consecutive neighbors together
             Single pass counts runs cleanly
-            Sort itself costs O(n log n)
-            Violates the explicit O(n) constraint
-        Hash Map O(n)
-            O of 1 lookup for existence checks
+            Sort itself costs n log n time
+            Violates the linear time constraint
+        Hash Map - linear O n
+            Constant time lookup for existence checks
             Visited flag prevents reprocessing
             Expand forward and backward per num
             Each number touched at most twice
         The Key Questions
-            What gives O of 1 lookup? Hash map
+            What gives constant time lookup? Hash map
             How to avoid reprocessing? Visited flag
             Together they deliver O of n total
         Reusable Pattern

@@ -47,7 +47,7 @@ mindmap
       The k most frequent elements
       In any order
     What is the hidden constraint?
-      Must be better than O(n log n)
+      Must beat O n log n time
       Standard sorting is disqualified
     Core insight
       Frequency is strictly bounded by N
